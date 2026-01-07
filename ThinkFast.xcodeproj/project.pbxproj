@@ -1,0 +1,1209 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0BA095E1069EB37C78156A1C /* GoalRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6590233E93C85F04A1204BD /* GoalRepositoryImpl.swift */; };
+		127BCD64222540C845C3CFAE /* Goal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233C0A79D27B54AB4039F098 /* Goal.swift */; };
+		16E62BBB3971336EFC593749 /* UserBaseline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30DC325F41EA403F06A58CE0 /* UserBaseline.swift */; };
+		176A38F74D0DB25FAFF1DB8F /* StreakRecoveryRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EBC782D6365B06F0249502B /* StreakRecoveryRepositoryImpl.swift */; };
+		1CB64906868C0019A91B1662 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7BF61868393D981DF63CD60 /* NotificationManager.swift */; };
+		28CFFDA6748D51FD5C6B3D7B /* StatsRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC6604D2C7426C023F013C48 /* StatsRepositoryImpl.swift */; };
+		38A862516B0BB48606F5F23D /* CheckGoalUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B36890FCA43478036B07394 /* CheckGoalUseCase.swift */; };
+		39A2C159B7676766A0956B8C /* CloudKitSyncManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16C814CC2C26DD274F6007BC /* CloudKitSyncManager.swift */; };
+		3B3CD0E66F39415B6EB1BD41 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D037863B0877527EE0DEDDBA /* AppDelegate.swift */; };
+		3B906139C5565E3FC2BA329B /* SettingsRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B3DE3BB72A660522AEEC2FB /* SettingsRepositoryImpl.swift */; };
+		3FB25260667E299E28A707EE /* TrackedAppsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2AFF87C72DBCE9D44ED014 /* TrackedAppsRepository.swift */; };
+		44A549E15B91B2EBE8F60EC4 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AE22A2F405540C515123B5 /* Extensions.swift */; };
+		48E64CEF74973CFBDA8CA03E /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40391A8233A90A5DFA4D9155 /* OnboardingView.swift */; };
+		4BF5672D48657EF2F83C051F /* StatsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FB3A7FD903041685FA54D88 /* StatsViewModel.swift */; };
+		4E32B674229662514A69EF99 /* UsageSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECD84623448E7EB557380E68 /* UsageSession.swift */; };
+		50C125AB98E98F0C37198124 /* CommonViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A677AA82E4F246F504900FB /* CommonViews.swift */; };
+		5450E4E5C7A5DDDA41EB16C6 /* Achievement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10192CED7245426FAB7DFA5B /* Achievement.swift */; };
+		54916448A7CA3DE89F613547 /* HapticFeedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13832D0A2D50DD5F0C4F5040 /* HapticFeedback.swift */; };
+		54E8335C06603098D4811B1D /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748AF981C1D6D84062D7CA8E /* SettingsView.swift */; };
+		591F23C57AE264AE9E7D3569 /* AnalyticsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39294A48B76124EBD77242FE /* AnalyticsManager.swift */; };
+		5B86CCE3C54757B0ACBC363B /* UserBaselineRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 446D5A2EA9AABFB2AE12D1A2 /* UserBaselineRepository.swift */; };
+		5FEF2E887A6E2D1CA01EF7D5 /* ThinkFastWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD4E65FD64899D7D62F84F55 /* ThinkFastWidget.swift */; };
+		61173B98C902669F670DA02B /* InterventionResultRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29E4886B4FF2A2FE061B7261 /* InterventionResultRepositoryImpl.swift */; };
+		692D9A22F028EA95FF4B2ECC /* AuthRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD2BB301E4D60BD15F32FC01 /* AuthRepository.swift */; };
+		6AF35B2E8809EE92893195A1 /* TrackedAppsRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F505C2BE5E56DBA26602C76 /* TrackedAppsRepositoryImpl.swift */; };
+		6B83F5AB9335663946B407A9 /* FacebookLogin in Frameworks */ = {isa = PBXBuildFile; productRef = 6671022247D44195C0D10119 /* FacebookLogin */; };
+		6CA70873411D47AC02D40215 /* RecordInterventionUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = C93B169F8DAF0E4C4C561664 /* RecordInterventionUseCase.swift */; };
+		6E9F7B7E5704EDC36E365F08 /* StreakRecoveryRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC7A095A9544CA4558D90460 /* StreakRecoveryRepository.swift */; };
+		6FCC6264E47CBFC03DD177D3 /* InterventionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1045A82170DB374CFB09B652 /* InterventionView.swift */; };
+		71FA0BEB6E47333633FFB92C /* ThinkFastApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20E6B23D2F27764142A0017A /* ThinkFastApp.swift */; };
+		72E2849077D0371EFAF6807D /* ManageAppsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2844727F11D4F37C01C1C0EF /* ManageAppsViewModel.swift */; };
+		77B72679BD9F863FAC1F1BB5 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 27BE6194BC968FA3530EE790 /* FirebaseFirestore */; };
+		782AEA3240D6FE33AE0FF428 /* DeviceActivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A627F5FDC7C1601AD7FC4C7 /* DeviceActivityManager.swift */; };
+		7D6E25D0B88AE1AB1034542C /* UsageEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4051E221A9C0CE9FD055F4F /* UsageEvent.swift */; };
+		7FEBE1351E4F49DA89748C71 /* StatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2469ABAABEB03E443C54488B /* StatsView.swift */; };
+		80256EF8259A3DCE60E39C42 /* GoalRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2A3AA7D3A2EB1EE5C4D940 /* GoalRepository.swift */; };
+		8757CC675F74E97B3F84EC7B /* StatsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = E09F5D729EADC39DF36D01F7 /* StatsRepository.swift */; };
+		87E784A8B4D34BF7304F6603 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B072BDC58D51FF3D9B4AFA95 /* MainTabView.swift */; };
+		8B1A45C4D3C2FCBE52A9FCF8 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = F2D83931FC65E8C4FC9573E2 /* FirebaseAnalytics */; };
+		8C2A131F9141AF9BE7CC876A /* GoalManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 816B9731B10D2B348779A185 /* GoalManagementView.swift */; };
+		8E03517408E0F5984323CAE6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 386452C88E7ADF008780DA1D /* Assets.xcassets */; };
+		8FDEB32EC085BD8FBF7174D3 /* ManageAppsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF9268043B7ACAF1A56A45D /* ManageAppsView.swift */; };
+		9399D4EF5985E1BA93391D10 /* StreakRecovery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF5034F56E3E01BDAF72722 /* StreakRecovery.swift */; };
+		947ACB8E17735282D9C17761 /* AppTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A003A651B243201C8279366 /* AppTheme.swift */; };
+		979782FAA7CF5A1E6B18666B /* BackgroundMonitoringService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6DC31A4BAF7DE7BF3FEE028 /* BackgroundMonitoringService.swift */; };
+		98AB96D14797A135EDC697AA /* ScreenTimeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD66593841A0140D7E6599A /* ScreenTimeManager.swift */; };
+		9C34869F3481C582A32F5252 /* UsageRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFBFC51B5B0E92184A083A9E /* UsageRepository.swift */; };
+		AC8F316692263B5A5B20B905 /* StartTrackingUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD8C2901BA7B454CC3D49E1 /* StartTrackingUseCase.swift */; };
+		AFCF569C0F1F4F7F66BDCB4E /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = A6FD84B50C9E891B003C43F6 /* FirebaseCrashlytics */; };
+		B563B01C4A81A091B88C95F5 /* UserBaselineRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BEB102EBB0D677DA87FB28A /* UserBaselineRepositoryImpl.swift */; };
+		B5C6A462141BEE0BDAC5090D /* DailyStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = A979A527F4CDD227EAF4FE5D /* DailyStats.swift */; };
+		B715980241B04C44824A727F /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = B5F7D94887234AD6B0C2B77C /* FirebaseAuth */; };
+		C250B5BCD4D849DA26C44C42 /* GoalViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15561923680EC688B59E2167 /* GoalViewModel.swift */; };
+		C5C6BA69BAB59A8637E0038C /* DependencyContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AD069AD7B1E6934F7F79B06 /* DependencyContainer.swift */; };
+		CA50CFB81B5CA0F10FC7BFE8 /* StopTrackingUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1799CF92F587D16BF0326CBE /* StopTrackingUseCase.swift */; };
+		CAE6D950C3825DE19D2A3E24 /* DeviceActivityReportExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40AA2955DA694F2F8CA579BB /* DeviceActivityReportExtension.swift */; };
+		CB3767833D26168511558F1A /* FacebookCore in Frameworks */ = {isa = PBXBuildFile; productRef = 5F078FF89415DEBFA85EA33E /* FacebookCore */; };
+		CD68AB3C240331776E1DDB0A /* InterventionResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C8A2B9FC774E5ED87E8E37B /* InterventionResult.swift */; };
+		D2E8043A26FBABF953205A6F /* InterventionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A37A4BF336583388C27C7A26 /* InterventionManager.swift */; };
+		D63830FE120EED7D94CB7A4E /* UsageRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C4A0F29BA14DB13BB48B5D3 /* UsageRepositoryImpl.swift */; };
+		D7E1B319D80E2C218DEE6312 /* PersistenceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF01986530C98D5491773336 /* PersistenceManager.swift */; };
+		E13B1DD8DA904272CC0158C5 /* ViewAnimations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33315F6098D68B688F2BAA7B /* ViewAnimations.swift */; };
+		E1AA8AAFAC6B6ECE9170BEC9 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC87D75BEA1F8595FB68E76 /* HomeView.swift */; };
+		E9C3EAE6E7C92D1DEB34237E /* InterventionResultRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69ADB54C4C7504CF2D027B43 /* InterventionResultRepository.swift */; };
+		EDCD545384AEBD438A3EA493 /* SettingsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEF31E8CFBB7BC3B0D2D1FC7 /* SettingsRepository.swift */; };
+		EFA07BCE570387333D71937F /* AuthRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D5E8F9C9666771E868B0CBA /* AuthRepositoryImpl.swift */; };
+		FD034059BBE547E74CE8138B /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F769C4B62DC50AB7860850B7 /* HomeViewModel.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		21506845914C4F2F7274213A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C03BB4DA751B506038F35565 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6DC8462936FF34062D090C21;
+			remoteInfo = ThinkFast;
+		};
+		389E9C4DF6C5288CDA3C90F7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C03BB4DA751B506038F35565 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6DC8462936FF34062D090C21;
+			remoteInfo = ThinkFast;
+		};
+		4F6F4B68D6E038C93038B28B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C03BB4DA751B506038F35565 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6DC8462936FF34062D090C21;
+			remoteInfo = ThinkFast;
+		};
+		7A6D840307B7C2F71007369A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C03BB4DA751B506038F35565 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6DC8462936FF34062D090C21;
+			remoteInfo = ThinkFast;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		10192CED7245426FAB7DFA5B /* Achievement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Achievement.swift; sourceTree = "<group>"; };
+		1045A82170DB374CFB09B652 /* InterventionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterventionView.swift; sourceTree = "<group>"; };
+		13832D0A2D50DD5F0C4F5040 /* HapticFeedback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticFeedback.swift; sourceTree = "<group>"; };
+		15561923680EC688B59E2167 /* GoalViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalViewModel.swift; sourceTree = "<group>"; };
+		16C814CC2C26DD274F6007BC /* CloudKitSyncManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitSyncManager.swift; sourceTree = "<group>"; };
+		1799CF92F587D16BF0326CBE /* StopTrackingUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopTrackingUseCase.swift; sourceTree = "<group>"; };
+		1C0567776E1E1272785E136F /* ThinkFastTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = ThinkFastTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		1C25C60DFCABD673C09CF46D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		1D5185FB86DF720F9DCE3A20 /* ThinkFastUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = ThinkFastUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		2039E83AAFD7EF5BF27CA1CB /* ThinkFast.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = ThinkFast.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		20E6B23D2F27764142A0017A /* ThinkFastApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThinkFastApp.swift; sourceTree = "<group>"; };
+		233C0A79D27B54AB4039F098 /* Goal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Goal.swift; sourceTree = "<group>"; };
+		2469ABAABEB03E443C54488B /* StatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsView.swift; sourceTree = "<group>"; };
+		2844727F11D4F37C01C1C0EF /* ManageAppsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageAppsViewModel.swift; sourceTree = "<group>"; };
+		29E4886B4FF2A2FE061B7261 /* InterventionResultRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterventionResultRepositoryImpl.swift; sourceTree = "<group>"; };
+		2A627F5FDC7C1601AD7FC4C7 /* DeviceActivityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceActivityManager.swift; sourceTree = "<group>"; };
+		30DC325F41EA403F06A58CE0 /* UserBaseline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserBaseline.swift; sourceTree = "<group>"; };
+		33315F6098D68B688F2BAA7B /* ViewAnimations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewAnimations.swift; sourceTree = "<group>"; };
+		3783AF532D1E70A52077E0BA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		386452C88E7ADF008780DA1D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		39294A48B76124EBD77242FE /* AnalyticsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsManager.swift; sourceTree = "<group>"; };
+		3C8A2B9FC774E5ED87E8E37B /* InterventionResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterventionResult.swift; sourceTree = "<group>"; };
+		3FD8C2901BA7B454CC3D49E1 /* StartTrackingUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartTrackingUseCase.swift; sourceTree = "<group>"; };
+		3FF5034F56E3E01BDAF72722 /* StreakRecovery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreakRecovery.swift; sourceTree = "<group>"; };
+		40391A8233A90A5DFA4D9155 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		40AA2955DA694F2F8CA579BB /* DeviceActivityReportExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceActivityReportExtension.swift; sourceTree = "<group>"; };
+		446D5A2EA9AABFB2AE12D1A2 /* UserBaselineRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserBaselineRepository.swift; sourceTree = "<group>"; };
+		4B3DE3BB72A660522AEEC2FB /* SettingsRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsRepositoryImpl.swift; sourceTree = "<group>"; };
+		4F505C2BE5E56DBA26602C76 /* TrackedAppsRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackedAppsRepositoryImpl.swift; sourceTree = "<group>"; };
+		5AD069AD7B1E6934F7F79B06 /* DependencyContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependencyContainer.swift; sourceTree = "<group>"; };
+		5B36890FCA43478036B07394 /* CheckGoalUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckGoalUseCase.swift; sourceTree = "<group>"; };
+		5FC87D75BEA1F8595FB68E76 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		69ADB54C4C7504CF2D027B43 /* InterventionResultRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterventionResultRepository.swift; sourceTree = "<group>"; };
+		6A677AA82E4F246F504900FB /* CommonViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonViews.swift; sourceTree = "<group>"; };
+		6AD66593841A0140D7E6599A /* ScreenTimeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenTimeManager.swift; sourceTree = "<group>"; };
+		6C4A0F29BA14DB13BB48B5D3 /* UsageRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageRepositoryImpl.swift; sourceTree = "<group>"; };
+		748AF981C1D6D84062D7CA8E /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		7A003A651B243201C8279366 /* AppTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTheme.swift; sourceTree = "<group>"; };
+		7BEB102EBB0D677DA87FB28A /* UserBaselineRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserBaselineRepositoryImpl.swift; sourceTree = "<group>"; };
+		7FB3A7FD903041685FA54D88 /* StatsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsViewModel.swift; sourceTree = "<group>"; };
+		816B9731B10D2B348779A185 /* GoalManagementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalManagementView.swift; sourceTree = "<group>"; };
+		92AE22A2F405540C515123B5 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		98D80ADB8A49B1A525765D7D /* DeviceActivityReportExtension.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = DeviceActivityReportExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		9D5E8F9C9666771E868B0CBA /* AuthRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthRepositoryImpl.swift; sourceTree = "<group>"; };
+		9EBC782D6365B06F0249502B /* StreakRecoveryRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreakRecoveryRepositoryImpl.swift; sourceTree = "<group>"; };
+		A37A4BF336583388C27C7A26 /* InterventionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterventionManager.swift; sourceTree = "<group>"; };
+		A5B92E6A1C055FB452BFFE16 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		A6DC31A4BAF7DE7BF3FEE028 /* BackgroundMonitoringService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundMonitoringService.swift; sourceTree = "<group>"; };
+		A979A527F4CDD227EAF4FE5D /* DailyStats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyStats.swift; sourceTree = "<group>"; };
+		AFBFC51B5B0E92184A083A9E /* UsageRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageRepository.swift; sourceTree = "<group>"; };
+		B072BDC58D51FF3D9B4AFA95 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
+		B6590233E93C85F04A1204BD /* GoalRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalRepositoryImpl.swift; sourceTree = "<group>"; };
+		BD2BB301E4D60BD15F32FC01 /* AuthRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthRepository.swift; sourceTree = "<group>"; };
+		BD4E65FD64899D7D62F84F55 /* ThinkFastWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThinkFastWidget.swift; sourceTree = "<group>"; };
+		BF01986530C98D5491773336 /* PersistenceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceManager.swift; sourceTree = "<group>"; };
+		C93B169F8DAF0E4C4C561664 /* RecordInterventionUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordInterventionUseCase.swift; sourceTree = "<group>"; };
+		CB2AFF87C72DBCE9D44ED014 /* TrackedAppsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackedAppsRepository.swift; sourceTree = "<group>"; };
+		CEF9268043B7ACAF1A56A45D /* ManageAppsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageAppsView.swift; sourceTree = "<group>"; };
+		D037863B0877527EE0DEDDBA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		D7BF61868393D981DF63CD60 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
+		DC7A095A9544CA4558D90460 /* StreakRecoveryRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreakRecoveryRepository.swift; sourceTree = "<group>"; };
+		DD0ED30356B90D87BFAD4CBA /* ThinkFast.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ThinkFast.entitlements; sourceTree = "<group>"; };
+		E09F5D729EADC39DF36D01F7 /* StatsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsRepository.swift; sourceTree = "<group>"; };
+		EAE8656E5F32E9F4E1EA4B36 /* ThinkFastWidget.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = ThinkFastWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		ECD84623448E7EB557380E68 /* UsageSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageSession.swift; sourceTree = "<group>"; };
+		ED2A3AA7D3A2EB1EE5C4D940 /* GoalRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalRepository.swift; sourceTree = "<group>"; };
+		F4051E221A9C0CE9FD055F4F /* UsageEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageEvent.swift; sourceTree = "<group>"; };
+		F769C4B62DC50AB7860850B7 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
+		FC6604D2C7426C023F013C48 /* StatsRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsRepositoryImpl.swift; sourceTree = "<group>"; };
+		FEF31E8CFBB7BC3B0D2D1FC7 /* SettingsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsRepository.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		0CD79341214082640E6BDD15 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8B1A45C4D3C2FCBE52A9FCF8 /* FirebaseAnalytics in Frameworks */,
+				B715980241B04C44824A727F /* FirebaseAuth in Frameworks */,
+				AFCF569C0F1F4F7F66BDCB4E /* FirebaseCrashlytics in Frameworks */,
+				77B72679BD9F863FAC1F1BB5 /* FirebaseFirestore in Frameworks */,
+				6B83F5AB9335663946B407A9 /* FacebookLogin in Frameworks */,
+				CB3767833D26168511558F1A /* FacebookCore in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0FFF1894444DCB3060BA23D1 /* ThinkFastWidget */ = {
+			isa = PBXGroup;
+			children = (
+				3783AF532D1E70A52077E0BA /* Info.plist */,
+				BD4E65FD64899D7D62F84F55 /* ThinkFastWidget.swift */,
+			);
+			path = ThinkFastWidget;
+			sourceTree = "<group>";
+		};
+		1918F1D116FD04F1D1A7454E /* ThinkFast */ = {
+			isa = PBXGroup;
+			children = (
+				D278E4AC83227954278EFF1C /* App */,
+				B5A24134F70040310445A6B5 /* Core */,
+				8C9451034D5CDDEDDBABDE29 /* Data */,
+				309A3810EED2095BA60708B5 /* Domain */,
+				BD5FF8B0D7DF3C14FA635933 /* Presentation */,
+				98657F53E3AFF83FC5E156D4 /* Resources */,
+			);
+			path = ThinkFast;
+			sourceTree = "<group>";
+		};
+		1AD87D0C4B02CD4B842E3AB6 /* Util */ = {
+			isa = PBXGroup;
+			children = (
+				92AE22A2F405540C515123B5 /* Extensions.swift */,
+				13832D0A2D50DD5F0C4F5040 /* HapticFeedback.swift */,
+				D7BF61868393D981DF63CD60 /* NotificationManager.swift */,
+				33315F6098D68B688F2BAA7B /* ViewAnimations.swift */,
+			);
+			path = Util;
+			sourceTree = "<group>";
+		};
+		22C20040697D5CE0001ABC07 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				98D80ADB8A49B1A525765D7D /* DeviceActivityReportExtension.appex */,
+				2039E83AAFD7EF5BF27CA1CB /* ThinkFast.app */,
+				1C0567776E1E1272785E136F /* ThinkFastTests.xctest */,
+				1D5185FB86DF720F9DCE3A20 /* ThinkFastUITests.xctest */,
+				EAE8656E5F32E9F4E1EA4B36 /* ThinkFastWidget.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		242C51C402E410C9FD318CB1 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				816B9731B10D2B348779A185 /* GoalManagementView.swift */,
+				15561923680EC688B59E2167 /* GoalViewModel.swift */,
+				748AF981C1D6D84062D7CA8E /* SettingsView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		2C84F077B4002A514489DCB3 /* ThinkFastUITests */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ThinkFastUITests;
+			sourceTree = "<group>";
+		};
+		309A3810EED2095BA60708B5 /* Domain */ = {
+			isa = PBXGroup;
+			children = (
+				E5873D2A8A1F64BBACDA4C91 /* Model */,
+				F6DF2BADA3CF86E16358FB56 /* Repository */,
+				58B1F28E8112F3890E533FC8 /* UseCase */,
+			);
+			path = Domain;
+			sourceTree = "<group>";
+		};
+		3CDE5B70327DAA953AFADE7D /* DeviceActivityReportExtension */ = {
+			isa = PBXGroup;
+			children = (
+				40AA2955DA694F2F8CA579BB /* DeviceActivityReportExtension.swift */,
+				A5B92E6A1C055FB452BFFE16 /* Info.plist */,
+			);
+			path = DeviceActivityReportExtension;
+			sourceTree = "<group>";
+		};
+		3FC7DDE6A1F215F20AC1E308 /* Theme */ = {
+			isa = PBXGroup;
+			children = (
+				7A003A651B243201C8279366 /* AppTheme.swift */,
+			);
+			path = Theme;
+			sourceTree = "<group>";
+		};
+		5375D082E62E88442000625F /* ThinkFastTests */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ThinkFastTests;
+			sourceTree = "<group>";
+		};
+		58B1F28E8112F3890E533FC8 /* UseCase */ = {
+			isa = PBXGroup;
+			children = (
+				5B36890FCA43478036B07394 /* CheckGoalUseCase.swift */,
+				C93B169F8DAF0E4C4C561664 /* RecordInterventionUseCase.swift */,
+				3FD8C2901BA7B454CC3D49E1 /* StartTrackingUseCase.swift */,
+				1799CF92F587D16BF0326CBE /* StopTrackingUseCase.swift */,
+			);
+			path = UseCase;
+			sourceTree = "<group>";
+		};
+		60F7382F67AABA7D864623F3 /* DI */ = {
+			isa = PBXGroup;
+			children = (
+				5AD069AD7B1E6934F7F79B06 /* DependencyContainer.swift */,
+			);
+			path = DI;
+			sourceTree = "<group>";
+		};
+		635E64497CBEC54AF5FDCA04 /* Stats */ = {
+			isa = PBXGroup;
+			children = (
+				2469ABAABEB03E443C54488B /* StatsView.swift */,
+				7FB3A7FD903041685FA54D88 /* StatsViewModel.swift */,
+			);
+			path = Stats;
+			sourceTree = "<group>";
+		};
+		6F63E5BCCA0CC5739B6099FE /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				6A677AA82E4F246F504900FB /* CommonViews.swift */,
+				1045A82170DB374CFB09B652 /* InterventionView.swift */,
+				B072BDC58D51FF3D9B4AFA95 /* MainTabView.swift */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
+		73BA18EF7911BD0A49C2789A = {
+			isa = PBXGroup;
+			children = (
+				3CDE5B70327DAA953AFADE7D /* DeviceActivityReportExtension */,
+				1918F1D116FD04F1D1A7454E /* ThinkFast */,
+				5375D082E62E88442000625F /* ThinkFastTests */,
+				2C84F077B4002A514489DCB3 /* ThinkFastUITests */,
+				0FFF1894444DCB3060BA23D1 /* ThinkFastWidget */,
+				22C20040697D5CE0001ABC07 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		835151E73686613D99C9501C /* Local */ = {
+			isa = PBXGroup;
+			children = (
+				A6DC31A4BAF7DE7BF3FEE028 /* BackgroundMonitoringService.swift */,
+				2A627F5FDC7C1601AD7FC4C7 /* DeviceActivityManager.swift */,
+				A37A4BF336583388C27C7A26 /* InterventionManager.swift */,
+				BF01986530C98D5491773336 /* PersistenceManager.swift */,
+				6AD66593841A0140D7E6599A /* ScreenTimeManager.swift */,
+				E0BC5122F6453F54121C181B /* Database */,
+			);
+			path = Local;
+			sourceTree = "<group>";
+		};
+		8C9451034D5CDDEDDBABDE29 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				835151E73686613D99C9501C /* Local */,
+				C839177238AE9C36CBDC8F40 /* Remote */,
+				C1F0D4311D6E28E0F0F66288 /* Repository */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		98657F53E3AFF83FC5E156D4 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				386452C88E7ADF008780DA1D /* Assets.xcassets */,
+				1C25C60DFCABD673C09CF46D /* Info.plist */,
+				DD0ED30356B90D87BFAD4CBA /* ThinkFast.entitlements */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		B5A24134F70040310445A6B5 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				DCF74994349963EF89A4E62D /* Analytics */,
+				60F7382F67AABA7D864623F3 /* DI */,
+				3FC7DDE6A1F215F20AC1E308 /* Theme */,
+				1AD87D0C4B02CD4B842E3AB6 /* Util */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		BD5FF8B0D7DF3C14FA635933 /* Presentation */ = {
+			isa = PBXGroup;
+			children = (
+				6F63E5BCCA0CC5739B6099FE /* Common */,
+				D2E16C33F22FE557A8ECABEB /* Home */,
+				F6D8A766F9EFB01E3B2AB260 /* Onboarding */,
+				242C51C402E410C9FD318CB1 /* Settings */,
+				635E64497CBEC54AF5FDCA04 /* Stats */,
+			);
+			path = Presentation;
+			sourceTree = "<group>";
+		};
+		C1F0D4311D6E28E0F0F66288 /* Repository */ = {
+			isa = PBXGroup;
+			children = (
+				9D5E8F9C9666771E868B0CBA /* AuthRepositoryImpl.swift */,
+				B6590233E93C85F04A1204BD /* GoalRepositoryImpl.swift */,
+				29E4886B4FF2A2FE061B7261 /* InterventionResultRepositoryImpl.swift */,
+				4B3DE3BB72A660522AEEC2FB /* SettingsRepositoryImpl.swift */,
+				FC6604D2C7426C023F013C48 /* StatsRepositoryImpl.swift */,
+				9EBC782D6365B06F0249502B /* StreakRecoveryRepositoryImpl.swift */,
+				4F505C2BE5E56DBA26602C76 /* TrackedAppsRepositoryImpl.swift */,
+				6C4A0F29BA14DB13BB48B5D3 /* UsageRepositoryImpl.swift */,
+				7BEB102EBB0D677DA87FB28A /* UserBaselineRepositoryImpl.swift */,
+			);
+			path = Repository;
+			sourceTree = "<group>";
+		};
+		C839177238AE9C36CBDC8F40 /* Remote */ = {
+			isa = PBXGroup;
+			children = (
+				16C814CC2C26DD274F6007BC /* CloudKitSyncManager.swift */,
+			);
+			path = Remote;
+			sourceTree = "<group>";
+		};
+		D278E4AC83227954278EFF1C /* App */ = {
+			isa = PBXGroup;
+			children = (
+				D037863B0877527EE0DEDDBA /* AppDelegate.swift */,
+				20E6B23D2F27764142A0017A /* ThinkFastApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		D2E16C33F22FE557A8ECABEB /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				5FC87D75BEA1F8595FB68E76 /* HomeView.swift */,
+				F769C4B62DC50AB7860850B7 /* HomeViewModel.swift */,
+				CEF9268043B7ACAF1A56A45D /* ManageAppsView.swift */,
+				2844727F11D4F37C01C1C0EF /* ManageAppsViewModel.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		DCF74994349963EF89A4E62D /* Analytics */ = {
+			isa = PBXGroup;
+			children = (
+				39294A48B76124EBD77242FE /* AnalyticsManager.swift */,
+			);
+			path = Analytics;
+			sourceTree = "<group>";
+		};
+		E0BC5122F6453F54121C181B /* Database */ = {
+			isa = PBXGroup;
+			children = (
+				A979A527F4CDD227EAF4FE5D /* DailyStats.swift */,
+				233C0A79D27B54AB4039F098 /* Goal.swift */,
+				3C8A2B9FC774E5ED87E8E37B /* InterventionResult.swift */,
+				3FF5034F56E3E01BDAF72722 /* StreakRecovery.swift */,
+				F4051E221A9C0CE9FD055F4F /* UsageEvent.swift */,
+				ECD84623448E7EB557380E68 /* UsageSession.swift */,
+				30DC325F41EA403F06A58CE0 /* UserBaseline.swift */,
+			);
+			path = Database;
+			sourceTree = "<group>";
+		};
+		E5873D2A8A1F64BBACDA4C91 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				10192CED7245426FAB7DFA5B /* Achievement.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		F6D8A766F9EFB01E3B2AB260 /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				40391A8233A90A5DFA4D9155 /* OnboardingView.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		F6DF2BADA3CF86E16358FB56 /* Repository */ = {
+			isa = PBXGroup;
+			children = (
+				BD2BB301E4D60BD15F32FC01 /* AuthRepository.swift */,
+				ED2A3AA7D3A2EB1EE5C4D940 /* GoalRepository.swift */,
+				69ADB54C4C7504CF2D027B43 /* InterventionResultRepository.swift */,
+				FEF31E8CFBB7BC3B0D2D1FC7 /* SettingsRepository.swift */,
+				E09F5D729EADC39DF36D01F7 /* StatsRepository.swift */,
+				DC7A095A9544CA4558D90460 /* StreakRecoveryRepository.swift */,
+				CB2AFF87C72DBCE9D44ED014 /* TrackedAppsRepository.swift */,
+				AFBFC51B5B0E92184A083A9E /* UsageRepository.swift */,
+				446D5A2EA9AABFB2AE12D1A2 /* UserBaselineRepository.swift */,
+			);
+			path = Repository;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		106AE028A9AA49674E8BA9D4 /* ThinkFastWidget */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5ECB1BC03502C85C745CB247 /* Build configuration list for PBXNativeTarget "ThinkFastWidget" */;
+			buildPhases = (
+				7FE0DF33E8109B481FE6F45D /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				EB41A4459969C7177617897B /* PBXTargetDependency */,
+			);
+			name = ThinkFastWidget;
+			packageProductDependencies = (
+			);
+			productName = ThinkFastWidget;
+			productReference = EAE8656E5F32E9F4E1EA4B36 /* ThinkFastWidget.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		6DC8462936FF34062D090C21 /* ThinkFast */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 050DD7D3F99368E927D98A10 /* Build configuration list for PBXNativeTarget "ThinkFast" */;
+			buildPhases = (
+				B4F25F0065DBFE879F68E7E2 /* Sources */,
+				EEB6A8638E71893C125D89D7 /* Resources */,
+				0CD79341214082640E6BDD15 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ThinkFast;
+			packageProductDependencies = (
+				F2D83931FC65E8C4FC9573E2 /* FirebaseAnalytics */,
+				B5F7D94887234AD6B0C2B77C /* FirebaseAuth */,
+				A6FD84B50C9E891B003C43F6 /* FirebaseCrashlytics */,
+				27BE6194BC968FA3530EE790 /* FirebaseFirestore */,
+				6671022247D44195C0D10119 /* FacebookLogin */,
+				5F078FF89415DEBFA85EA33E /* FacebookCore */,
+			);
+			productName = ThinkFast;
+			productReference = 2039E83AAFD7EF5BF27CA1CB /* ThinkFast.app */;
+			productType = "com.apple.product-type.application";
+		};
+		8EA718895DB0990B68CDA772 /* ThinkFastUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 100F590F9BD6B4B7F420C569 /* Build configuration list for PBXNativeTarget "ThinkFastUITests" */;
+			buildPhases = (
+				E7DAB09C21C81F3A8BF1116D /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E33B0A8EBA2BFE51F51B8D8C /* PBXTargetDependency */,
+			);
+			name = ThinkFastUITests;
+			packageProductDependencies = (
+			);
+			productName = ThinkFastUITests;
+			productReference = 1D5185FB86DF720F9DCE3A20 /* ThinkFastUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		A3147EF8D47DFC909A10FEF2 /* ThinkFastTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 593090F880E77CE44CE1D871 /* Build configuration list for PBXNativeTarget "ThinkFastTests" */;
+			buildPhases = (
+				20B3A17DA71339DD596076C8 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D6A156E8CED837008E4CDF92 /* PBXTargetDependency */,
+			);
+			name = ThinkFastTests;
+			packageProductDependencies = (
+			);
+			productName = ThinkFastTests;
+			productReference = 1C0567776E1E1272785E136F /* ThinkFastTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		D8EF051C7BD1DA7A001B646E /* DeviceActivityReportExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 45DE96359684C329344E6277 /* Build configuration list for PBXNativeTarget "DeviceActivityReportExtension" */;
+			buildPhases = (
+				B67587CE39D72AC0FF3F9583 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				02D3195FA419637DB3798513 /* PBXTargetDependency */,
+			);
+			name = DeviceActivityReportExtension;
+			packageProductDependencies = (
+			);
+			productName = DeviceActivityReportExtension;
+			productReference = 98D80ADB8A49B1A525765D7D /* DeviceActivityReportExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		C03BB4DA751B506038F35565 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					106AE028A9AA49674E8BA9D4 = {
+						DevelopmentTeam = 3FKXUW9MS9;
+						ProvisioningStyle = Automatic;
+					};
+					6DC8462936FF34062D090C21 = {
+						DevelopmentTeam = 3FKXUW9MS9;
+						ProvisioningStyle = Automatic;
+					};
+					8EA718895DB0990B68CDA772 = {
+						DevelopmentTeam = 3FKXUW9MS9;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 6DC8462936FF34062D090C21;
+					};
+					A3147EF8D47DFC909A10FEF2 = {
+						DevelopmentTeam = 3FKXUW9MS9;
+						ProvisioningStyle = Automatic;
+					};
+					D8EF051C7BD1DA7A001B646E = {
+						DevelopmentTeam = 3FKXUW9MS9;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 1781296FB809B21ED53613C7 /* Build configuration list for PBXProject "ThinkFast" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 73BA18EF7911BD0A49C2789A;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				C6EF5F09FE2FF2544FD53E95 /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */,
+				92EAFF0BC18305DE05C2D8D4 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
+			preferredProjectObjectVersion = 77;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				D8EF051C7BD1DA7A001B646E /* DeviceActivityReportExtension */,
+				6DC8462936FF34062D090C21 /* ThinkFast */,
+				A3147EF8D47DFC909A10FEF2 /* ThinkFastTests */,
+				8EA718895DB0990B68CDA772 /* ThinkFastUITests */,
+				106AE028A9AA49674E8BA9D4 /* ThinkFastWidget */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		EEB6A8638E71893C125D89D7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8E03517408E0F5984323CAE6 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		20B3A17DA71339DD596076C8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7FE0DF33E8109B481FE6F45D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5FEF2E887A6E2D1CA01EF7D5 /* ThinkFastWidget.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B4F25F0065DBFE879F68E7E2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5450E4E5C7A5DDDA41EB16C6 /* Achievement.swift in Sources */,
+				591F23C57AE264AE9E7D3569 /* AnalyticsManager.swift in Sources */,
+				3B3CD0E66F39415B6EB1BD41 /* AppDelegate.swift in Sources */,
+				947ACB8E17735282D9C17761 /* AppTheme.swift in Sources */,
+				692D9A22F028EA95FF4B2ECC /* AuthRepository.swift in Sources */,
+				EFA07BCE570387333D71937F /* AuthRepositoryImpl.swift in Sources */,
+				979782FAA7CF5A1E6B18666B /* BackgroundMonitoringService.swift in Sources */,
+				38A862516B0BB48606F5F23D /* CheckGoalUseCase.swift in Sources */,
+				39A2C159B7676766A0956B8C /* CloudKitSyncManager.swift in Sources */,
+				50C125AB98E98F0C37198124 /* CommonViews.swift in Sources */,
+				B5C6A462141BEE0BDAC5090D /* DailyStats.swift in Sources */,
+				C5C6BA69BAB59A8637E0038C /* DependencyContainer.swift in Sources */,
+				782AEA3240D6FE33AE0FF428 /* DeviceActivityManager.swift in Sources */,
+				44A549E15B91B2EBE8F60EC4 /* Extensions.swift in Sources */,
+				127BCD64222540C845C3CFAE /* Goal.swift in Sources */,
+				8C2A131F9141AF9BE7CC876A /* GoalManagementView.swift in Sources */,
+				80256EF8259A3DCE60E39C42 /* GoalRepository.swift in Sources */,
+				0BA095E1069EB37C78156A1C /* GoalRepositoryImpl.swift in Sources */,
+				C250B5BCD4D849DA26C44C42 /* GoalViewModel.swift in Sources */,
+				54916448A7CA3DE89F613547 /* HapticFeedback.swift in Sources */,
+				E1AA8AAFAC6B6ECE9170BEC9 /* HomeView.swift in Sources */,
+				FD034059BBE547E74CE8138B /* HomeViewModel.swift in Sources */,
+				D2E8043A26FBABF953205A6F /* InterventionManager.swift in Sources */,
+				CD68AB3C240331776E1DDB0A /* InterventionResult.swift in Sources */,
+				E9C3EAE6E7C92D1DEB34237E /* InterventionResultRepository.swift in Sources */,
+				61173B98C902669F670DA02B /* InterventionResultRepositoryImpl.swift in Sources */,
+				6FCC6264E47CBFC03DD177D3 /* InterventionView.swift in Sources */,
+				87E784A8B4D34BF7304F6603 /* MainTabView.swift in Sources */,
+				8FDEB32EC085BD8FBF7174D3 /* ManageAppsView.swift in Sources */,
+				72E2849077D0371EFAF6807D /* ManageAppsViewModel.swift in Sources */,
+				1CB64906868C0019A91B1662 /* NotificationManager.swift in Sources */,
+				48E64CEF74973CFBDA8CA03E /* OnboardingView.swift in Sources */,
+				D7E1B319D80E2C218DEE6312 /* PersistenceManager.swift in Sources */,
+				6CA70873411D47AC02D40215 /* RecordInterventionUseCase.swift in Sources */,
+				98AB96D14797A135EDC697AA /* ScreenTimeManager.swift in Sources */,
+				EDCD545384AEBD438A3EA493 /* SettingsRepository.swift in Sources */,
+				3B906139C5565E3FC2BA329B /* SettingsRepositoryImpl.swift in Sources */,
+				54E8335C06603098D4811B1D /* SettingsView.swift in Sources */,
+				AC8F316692263B5A5B20B905 /* StartTrackingUseCase.swift in Sources */,
+				8757CC675F74E97B3F84EC7B /* StatsRepository.swift in Sources */,
+				28CFFDA6748D51FD5C6B3D7B /* StatsRepositoryImpl.swift in Sources */,
+				7FEBE1351E4F49DA89748C71 /* StatsView.swift in Sources */,
+				4BF5672D48657EF2F83C051F /* StatsViewModel.swift in Sources */,
+				CA50CFB81B5CA0F10FC7BFE8 /* StopTrackingUseCase.swift in Sources */,
+				9399D4EF5985E1BA93391D10 /* StreakRecovery.swift in Sources */,
+				6E9F7B7E5704EDC36E365F08 /* StreakRecoveryRepository.swift in Sources */,
+				176A38F74D0DB25FAFF1DB8F /* StreakRecoveryRepositoryImpl.swift in Sources */,
+				71FA0BEB6E47333633FFB92C /* ThinkFastApp.swift in Sources */,
+				3FB25260667E299E28A707EE /* TrackedAppsRepository.swift in Sources */,
+				6AF35B2E8809EE92893195A1 /* TrackedAppsRepositoryImpl.swift in Sources */,
+				7D6E25D0B88AE1AB1034542C /* UsageEvent.swift in Sources */,
+				9C34869F3481C582A32F5252 /* UsageRepository.swift in Sources */,
+				D63830FE120EED7D94CB7A4E /* UsageRepositoryImpl.swift in Sources */,
+				4E32B674229662514A69EF99 /* UsageSession.swift in Sources */,
+				16E62BBB3971336EFC593749 /* UserBaseline.swift in Sources */,
+				5B86CCE3C54757B0ACBC363B /* UserBaselineRepository.swift in Sources */,
+				B563B01C4A81A091B88C95F5 /* UserBaselineRepositoryImpl.swift in Sources */,
+				E13B1DD8DA904272CC0158C5 /* ViewAnimations.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B67587CE39D72AC0FF3F9583 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CAE6D950C3825DE19D2A3E24 /* DeviceActivityReportExtension.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E7DAB09C21C81F3A8BF1116D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		02D3195FA419637DB3798513 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6DC8462936FF34062D090C21 /* ThinkFast */;
+			targetProxy = 7A6D840307B7C2F71007369A /* PBXContainerItemProxy */;
+		};
+		D6A156E8CED837008E4CDF92 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6DC8462936FF34062D090C21 /* ThinkFast */;
+			targetProxy = 389E9C4DF6C5288CDA3C90F7 /* PBXContainerItemProxy */;
+		};
+		E33B0A8EBA2BFE51F51B8D8C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6DC8462936FF34062D090C21 /* ThinkFast */;
+			targetProxy = 21506845914C4F2F7274213A /* PBXContainerItemProxy */;
+		};
+		EB41A4459969C7177617897B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6DC8462936FF34062D090C21 /* ThinkFast */;
+			targetProxy = 4F6F4B68D6E038C93038B28B /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		015D7B23A4A34DDF0A83FC39 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_ENTITLEMENTS = ThinkFast/Resources/ThinkFast.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 3FKXUW9MS9;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = ThinkFast/Resources/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = dev.sadakat.thinkfast;
+				PRODUCT_NAME = ThinkFast;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		253E2BD8F5E9639E3E363F8F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_ENTITLEMENTS = ThinkFast/Resources/ThinkFast.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 3FKXUW9MS9;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = ThinkFast/Resources/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = dev.sadakat.thinkfast;
+				PRODUCT_NAME = ThinkFast;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		26740BCB2E42BD4E93D2410D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				EXTENSION_POINT_IDENTIFIER = "com.apple.widgetkit-extension";
+				EXTENSION_SUFFIX = .appex;
+				INFOPLIST_FILE = ThinkFastWidget/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = dev.sadakat.thinkfast.widget;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		2B1F0095901BD4CA750CCA3F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ThinkFast.app/ThinkFast";
+			};
+			name = Release;
+		};
+		42370E76CE9668ACC9D3EAE2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ThinkFast.app/ThinkFast";
+			};
+			name = Debug;
+		};
+		49C3CA124F0DA2453085E690 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				EXTENSION_POINT_IDENTIFIER = "com.apple.deviceactivity.report-extension";
+				EXTENSION_SUFFIX = .appex;
+				INFOPLIST_FILE = DeviceActivityReportExtension/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = dev.sadakat.thinkfast.DeviceActivityReport;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		58A904C73EE3CBB9EB9976B6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				EXTENSION_POINT_IDENTIFIER = "com.apple.deviceactivity.report-extension";
+				EXTENSION_SUFFIX = .appex;
+				INFOPLIST_FILE = DeviceActivityReportExtension/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = dev.sadakat.thinkfast.DeviceActivityReport;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		68A59BB0D3011B99F9846B38 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = ThinkFast;
+			};
+			name = Release;
+		};
+		76369F64301DBBCAF1E1204A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = ThinkFast/Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = dev.sadakat.thinkfast;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		BD0ADF179F2DB12A32B6B6AB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				EXTENSION_POINT_IDENTIFIER = "com.apple.widgetkit-extension";
+				EXTENSION_SUFFIX = .appex;
+				INFOPLIST_FILE = ThinkFastWidget/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = dev.sadakat.thinkfast.widget;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		C890EFF94B73E639473E42C5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = ThinkFast;
+			};
+			name = Debug;
+		};
+		FC2F37DB04665B517B4475A4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = ThinkFast/Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = dev.sadakat.thinkfast;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		050DD7D3F99368E927D98A10 /* Build configuration list for PBXNativeTarget "ThinkFast" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FC2F37DB04665B517B4475A4 /* Debug */,
+				76369F64301DBBCAF1E1204A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		100F590F9BD6B4B7F420C569 /* Build configuration list for PBXNativeTarget "ThinkFastUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C890EFF94B73E639473E42C5 /* Debug */,
+				68A59BB0D3011B99F9846B38 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		1781296FB809B21ED53613C7 /* Build configuration list for PBXProject "ThinkFast" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				015D7B23A4A34DDF0A83FC39 /* Debug */,
+				253E2BD8F5E9639E3E363F8F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		45DE96359684C329344E6277 /* Build configuration list for PBXNativeTarget "DeviceActivityReportExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				58A904C73EE3CBB9EB9976B6 /* Debug */,
+				49C3CA124F0DA2453085E690 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		593090F880E77CE44CE1D871 /* Build configuration list for PBXNativeTarget "ThinkFastTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				42370E76CE9668ACC9D3EAE2 /* Debug */,
+				2B1F0095901BD4CA750CCA3F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		5ECB1BC03502C85C745CB247 /* Build configuration list for PBXNativeTarget "ThinkFastWidget" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				26740BCB2E42BD4E93D2410D /* Debug */,
+				BD0ADF179F2DB12A32B6B6AB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		92EAFF0BC18305DE05C2D8D4 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 10.24.0;
+			};
+		};
+		C6EF5F09FE2FF2544FD53E95 /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/facebook/facebook-ios-sdk.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 17.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		27BE6194BC968FA3530EE790 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 92EAFF0BC18305DE05C2D8D4 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+		5F078FF89415DEBFA85EA33E /* FacebookCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C6EF5F09FE2FF2544FD53E95 /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */;
+			productName = FacebookCore;
+		};
+		6671022247D44195C0D10119 /* FacebookLogin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C6EF5F09FE2FF2544FD53E95 /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */;
+			productName = FacebookLogin;
+		};
+		A6FD84B50C9E891B003C43F6 /* FirebaseCrashlytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 92EAFF0BC18305DE05C2D8D4 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCrashlytics;
+		};
+		B5F7D94887234AD6B0C2B77C /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 92EAFF0BC18305DE05C2D8D4 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		F2D83931FC65E8C4FC9573E2 /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 92EAFF0BC18305DE05C2D8D4 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = C03BB4DA751B506038F35565 /* Project object */;
+}
