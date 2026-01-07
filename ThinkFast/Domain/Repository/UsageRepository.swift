@@ -15,6 +15,9 @@ protocol UsageRepository {
     func getSessions(for dateRange: ClosedRange<Date>) async throws -> [UsageSession]
     func getSessions(for app: String, dateRange: ClosedRange<Date>) async throws -> [UsageSession]
 
+    // MARK: - JITAI Support
+    func getSessionsInRange(startDate: String, endDate: String) async throws -> [UsageSession]
+
     // MARK: - Event Management
     func recordEvent(_ event: UsageEvent) async throws
     func getEvents(for session: UsageSession) async throws -> [UsageEvent]

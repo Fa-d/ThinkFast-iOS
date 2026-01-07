@@ -54,6 +54,22 @@ final class UsageRepositoryImpl: UsageRepository {
         return try context.fetch(descriptor)
     }
 
+    // MARK: - JITAI Support
+    func getSessionsInRange(startDate: String, endDate: String) async throws -> [UsageSession] {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+
+        guard let start = dateFormatter.date(from: startDate),
+              let end = dateFormatter.date(from: endDate) else {
+            return []
+        }
+
+        let descriptor = FetchDescriptor<UsageSession>(
+            predicate: #Predicate { $0.date >= start && $0.date <= end }
+        )
+        return try context.fetch(descriptor)
+    }
+
     func recordEvent(_ event: UsageEvent) async throws {
         context.insert(event)
         try context.save()

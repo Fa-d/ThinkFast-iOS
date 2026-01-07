@@ -20,6 +20,14 @@ protocol DependencyContainer {
     var userBaselineRepository: UserBaselineRepository { get }
     var settingsRepository: SettingsRepository { get }
     var authRepository: AuthRepository { get }
+
+    // JITAI Components
+    var personaDetector: PersonaDetector { get }
+    var opportunityDetector: OpportunityDetector { get }
+    var contentSelector: ContentSelector { get }
+    var personaAwareContentSelector: PersonaAwareContentSelector { get }
+    var adaptiveInterventionRateLimiter: AdaptiveInterventionRateLimiter { get }
+    var jitaiInterventionManager: JitaiInterventionManager { get }
 }
 
 /// Main dependency container implementation
@@ -40,6 +48,39 @@ final class AppDependencyContainer: DependencyContainer {
     lazy var userBaselineRepository: UserBaselineRepository = UserBaselineRepositoryImpl(context: modelContext)
     lazy var settingsRepository: SettingsRepository = SettingsRepositoryImpl()
     lazy var authRepository: AuthRepository = AuthRepositoryImpl()
+
+    // MARK: - JITAI Components (Lazy)
+    lazy var personaDetector: PersonaDetector = PersonaDetector(
+        interventionResultRepository: interventionResultRepository,
+        usageRepository: usageRepository
+    )
+
+    lazy var opportunityDetector: OpportunityDetector = OpportunityDetector(
+        interventionResultRepository: interventionResultRepository
+    )
+
+    lazy var contentSelector: ContentSelector = ContentSelector()
+
+    lazy var personaAwareContentSelector: PersonaAwareContentSelector = PersonaAwareContentSelector(
+        personaDetector: personaDetector,
+        contentSelector: contentSelector
+    )
+
+    lazy var adaptiveInterventionRateLimiter: AdaptiveInterventionRateLimiter = AdaptiveInterventionRateLimiter(
+        interventionPreferences: UserDefaults.standard,
+        personaDetector: personaDetector,
+        opportunityDetector: opportunityDetector
+    )
+
+    lazy var jitaiInterventionManager: JitaiInterventionManager = JitaiInterventionManager(
+        personaDetector: personaDetector,
+        opportunityDetector: opportunityDetector,
+        personaAwareContentSelector: personaAwareContentSelector,
+        adaptiveRateLimiter: adaptiveInterventionRateLimiter,
+        interventionResultRepository: interventionResultRepository,
+        goalRepository: goalRepository,
+        usageRepository: usageRepository
+    )
 
     // MARK: - Initializer
     private init(modelContext: ModelContext? = nil) {

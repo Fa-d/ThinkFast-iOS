@@ -39,6 +39,26 @@ final class InterventionResultRepositoryImpl: InterventionResultRepository {
         return try context.fetch(descriptor)
     }
 
+    // MARK: - JITAI Support
+    func getResultsInRange(startTimestamp: Int64, endTimestamp: Int64) async throws -> [InterventionResult] {
+        let startDate = Date(timeIntervalSince1970: TimeInterval(startTimestamp / 1000))
+        let endDate = Date(timeIntervalSince1970: TimeInterval(endTimestamp / 1000))
+
+        let descriptor = FetchDescriptor<InterventionResult>(
+            predicate: #Predicate { $0.feedbackTimestamp >= startDate && $0.feedbackTimestamp <= endDate }
+        )
+        return try context.fetch(descriptor)
+    }
+
+    func getRecentResultsForApp(targetApp: String, limit: Int) async throws -> [InterventionResult] {
+        var descriptor = FetchDescriptor<InterventionResult>(
+            predicate: #Predicate { $0.targetApp == targetApp }
+        )
+        descriptor.fetchLimit = limit
+        descriptor.sortBy = [SortDescriptor(\.feedbackTimestamp, order: .reverse)]
+        return try context.fetch(descriptor)
+    }
+
     func getEffectivenessMetrics(for app: String?) async throws -> EffectivenessData {
         // TODO: Implement actual calculation
         return EffectivenessData(

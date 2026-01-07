@@ -14,6 +14,10 @@ protocol InterventionResultRepository {
     func getResults(for app: String, dateRange: ClosedRange<Date>) async throws -> [InterventionResult]
     func getAllResults() async throws -> [InterventionResult]
 
+    // MARK: - JITAI Support
+    func getResultsInRange(startTimestamp: Int64, endTimestamp: Int64) async throws -> [InterventionResult]
+    func getRecentResultsForApp(targetApp: String, limit: Int) async throws -> [InterventionResult]
+
     // MARK: - Effectiveness
     func getEffectivenessMetrics(for app: String?) async throws -> EffectivenessData
     func getSuccessRate(for interventionType: String) async throws -> Double

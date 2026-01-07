@@ -22,8 +22,16 @@ final class InterventionResult {
 
     // MARK: - Context
     var timeOfDay: String = "" // morning, afternoon, evening, night
+    var hourOfDay: Int = 0 // Hour of day (0-23) for JITAI analysis
     var streakAtTime: Int = 0
     var goalProgressAtTime: Int? // Percentage of daily limit used
+
+    // MARK: - JITAI Properties
+    var quickReopen: Bool = false // Was this a quick reopen (< 2 min)
+    var opportunityScore: Int = 0 // Opportunity score (0-100)
+    var opportunityLevel: String = "" // EXCELLENT, GOOD, MODERATE, POOR
+    var persona: String = "" // Detected persona at intervention time
+    var decisionSource: String = "" // What approved/blocked this intervention
 
     // MARK: - Sync Properties
     var userId: String?
@@ -42,8 +50,14 @@ final class InterventionResult {
         sessionDuration: TimeInterval = 0,
         wasEffective: Bool? = nil,
         timeOfDay: String = "",
+        hourOfDay: Int = 0,
         streakAtTime: Int = 0,
         goalProgressAtTime: Int? = nil,
+        quickReopen: Bool = false,
+        opportunityScore: Int = 0,
+        opportunityLevel: String = "",
+        persona: String = "",
+        decisionSource: String = "",
         userId: String? = nil,
         syncStatus: String = "pending",
         lastModified: Date = Date(),
@@ -58,8 +72,14 @@ final class InterventionResult {
         self.sessionDuration = sessionDuration
         self.wasEffective = wasEffective
         self.timeOfDay = timeOfDay
+        self.hourOfDay = hourOfDay
         self.streakAtTime = streakAtTime
         self.goalProgressAtTime = goalProgressAtTime
+        self.quickReopen = quickReopen
+        self.opportunityScore = opportunityScore
+        self.opportunityLevel = opportunityLevel
+        self.persona = persona
+        self.decisionSource = decisionSource
         self.userId = userId
         self.syncStatus = syncStatus
         self.lastModified = lastModified
