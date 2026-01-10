@@ -1,4 +1,4 @@
-name: ThinkFast
+name: Intently
 options:
   bundleIdPrefix: dev.sadakat
   deploymentTarget:
@@ -8,7 +8,7 @@ options:
 
 settings:
   base:
-    PRODUCT_NAME: ThinkFast
+    PRODUCT_NAME: Intently
     MARKETING_VERSION: "1.0.0"
     CURRENT_PROJECT_VERSION: "1"
     SWIFT_VERSION: "5.9"
@@ -16,23 +16,23 @@ settings:
     TARGETED_DEVICE_FAMILY: "1,2"
     ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
     ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
-    INFOPLIST_FILE: ThinkFast/Resources/Info.plist
-    PRODUCT_BUNDLE_IDENTIFIER: dev.sadakat.thinkfast
-    CODE_SIGN_ENTITLEMENTS: ThinkFast/Resources/ThinkFast.entitlements
+    INFOPLIST_FILE: Intently/Resources/Info.plist
+    PRODUCT_BUNDLE_IDENTIFIER: dev.sadakat.intently
+    CODE_SIGN_ENTITLEMENTS: Intently/Resources/Intently.entitlements
     CODE_SIGN_STYLE: Automatic
     DEVELOPMENT_TEAM: "3FKXUW9MS9"
     ENABLE_PREVIEWS: YES
 
 targets:
-  ThinkFast:
+  Intently:
     type: application
     platform: iOS
     sources:
-      - ThinkFast
+      - Intently
     settings:
       base:
-        INFOPLIST_FILE: ThinkFast/Resources/Info.plist
-        PRODUCT_BUNDLE_IDENTIFIER: dev.sadakat.thinkfast
+        INFOPLIST_FILE: Intently/Resources/Info.plist
+        PRODUCT_BUNDLE_IDENTIFIER: dev.sadakat.intently
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
     dependencies:
       - package: Firebase
@@ -48,36 +48,36 @@ targets:
       - package: Facebook
         product: FacebookCore
 
-  ThinkFastTests:
+  IntentlyTests:
     type: bundle.unit-test
     platform: iOS
     sources:
-      - ThinkFastTests
+      - IntentlyTests
     dependencies:
-      - target: ThinkFast
+      - target: Intently
 
-  ThinkFastUITests:
+  IntentlyUITests:
     type: bundle.ui-testing
     platform: iOS
     sources:
-      - ThinkFastUITests
+      - IntentlyUITests
     dependencies:
-      - target: ThinkFast
+      - target: Intently
 
-  ThinkFastWidget:
+  IntentlyWidget:
     type: app-extension
     platform: iOS
     deploymentTarget: "17.0"
     sources:
-      - ThinkFastWidget
+      - IntentlyWidget
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: dev.sadakat.thinkfast.widget
-        INFOPLIST_FILE: ThinkFastWidget/Info.plist
+        PRODUCT_BUNDLE_IDENTIFIER: dev.sadakat.intently.widget
+        INFOPLIST_FILE: IntentlyWidget/Info.plist
         EXTENSION_SUFFIX: .appex
         EXTENSION_POINT_IDENTIFIER: com.apple.widgetkit-extension
     dependencies:
-      - target: ThinkFast
+      - target: Intently
 
   DeviceActivityReportExtension:
     type: app-extension
@@ -87,25 +87,25 @@ targets:
       - DeviceActivityReportExtension
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: dev.sadakat.thinkfast.DeviceActivityReport
+        PRODUCT_BUNDLE_IDENTIFIER: dev.sadakat.intently.DeviceActivityReport
         INFOPLIST_FILE: DeviceActivityReportExtension/Info.plist
         EXTENSION_SUFFIX: .appex
         EXTENSION_POINT_IDENTIFIER: com.apple.deviceactivity.report-extension
     dependencies:
-      - target: ThinkFast
+      - target: Intently
 
 schemes:
-  ThinkFast:
+  Intently:
     build:
       targets:
-        ThinkFast: all
+        Intently: all
     run:
       config: Debug
     test:
       config: Debug
       targets:
-        - ThinkFastTests
-        - ThinkFastUITests
+        - IntentlyTests
+        - IntentlyUITests
     profile:
       config: Release
     analyze:

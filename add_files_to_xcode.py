@@ -7,19 +7,19 @@ import re
 
 # Files to add with their group paths
 files_to_add = [
-    ("ThinkFast/Data/Local/OnboardingQuestManager.swift", "Data/Local"),
-    ("ThinkFast/Data/Local/StreakRecoveryManager.swift", "Data/Local"),
-    ("ThinkFast/Domain/UseCase/UserBaselineCalculator.swift", "Domain/UseCase"),
-    ("ThinkFast/Presentation/Auth/SignInView.swift", "Presentation/Auth"),
-    ("ThinkFast/Presentation/Charts/AppBreakdownDonutChart.swift", "Presentation/Charts"),
-    ("ThinkFast/Presentation/Charts/ChartModels.swift", "Presentation/Charts"),
-    ("ThinkFast/Presentation/Charts/GoalProgressLineChart.swift", "Presentation/Charts"),
-    ("ThinkFast/Presentation/Charts/TimePatternHeatmap.swift", "Presentation/Charts"),
-    ("ThinkFast/Presentation/Charts/WeeklyUsageChart.swift", "Presentation/Charts"),
-    ("ThinkFast/Presentation/Home/BaselineComparisonCard.swift", "Presentation/Home"),
-    ("ThinkFast/Presentation/Home/QuestProgressCard.swift", "Presentation/Home"),
-    ("ThinkFast/Presentation/Home/QuickWinCelebrations.swift", "Presentation/Home"),
-    ("ThinkFast/Presentation/Home/StreakRecoveryCard.swift", "Presentation/Home"),
+    ("Intently/Data/Local/OnboardingQuestManager.swift", "Data/Local"),
+    ("Intently/Data/Local/StreakRecoveryManager.swift", "Data/Local"),
+    ("Intently/Domain/UseCase/UserBaselineCalculator.swift", "Domain/UseCase"),
+    ("Intently/Presentation/Auth/SignInView.swift", "Presentation/Auth"),
+    ("Intently/Presentation/Charts/AppBreakdownDonutChart.swift", "Presentation/Charts"),
+    ("Intently/Presentation/Charts/ChartModels.swift", "Presentation/Charts"),
+    ("Intently/Presentation/Charts/GoalProgressLineChart.swift", "Presentation/Charts"),
+    ("Intently/Presentation/Charts/TimePatternHeatmap.swift", "Presentation/Charts"),
+    ("Intently/Presentation/Charts/WeeklyUsageChart.swift", "Presentation/Charts"),
+    ("Intently/Presentation/Home/BaselineComparisonCard.swift", "Presentation/Home"),
+    ("Intently/Presentation/Home/QuestProgressCard.swift", "Presentation/Home"),
+    ("Intently/Presentation/Home/QuickWinCelebrations.swift", "Presentation/Home"),
+    ("Intently/Presentation/Home/StreakRecoveryCard.swift", "Presentation/Home"),
 ]
 
 def generate_id(seed):
@@ -69,7 +69,7 @@ def add_files_to_project(project_path):
 
     file_ref_entries = []
     for filename, (file_ref_id, file_path) in file_refs.items():
-        relative_path = file_path.replace("ThinkFast/", "")
+        relative_path = file_path.replace("Intently/", "")
         entry = f"\t\t{file_ref_id} /* {filename} */ = {{isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = {filename}; sourceTree = \"<group>\"; }};\n"
         file_ref_entries.append(entry)
 
@@ -114,7 +114,7 @@ def add_files_to_project(project_path):
         elif "UseCase" in file_path:
             marker = "UseCase /* UseCase */"
         else:
-            marker = "ThinkFast /* ThinkFast */"
+            marker = "Intently /* Intently */"
 
         pos = content.find(marker)
         if pos != -1:
@@ -147,4 +147,4 @@ def add_files_to_project(project_path):
     print(f"\nSuccessfully added {len(files_to_process)} files to project!")
 
 if __name__ == "__main__":
-    add_files_to_project("ThinkFast.xcodeproj/project.pbxproj")
+    add_files_to_project("Intently.xcodeproj/project.pbxproj")

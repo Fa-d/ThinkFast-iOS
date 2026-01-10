@@ -1,4 +1,4 @@
-# ThinkFast iOS - App Tracking & Goal Management Flow
+# Intently iOS - App Tracking & Goal Management Flow
 
 ## 📊 Complete Data Flow Architecture
 

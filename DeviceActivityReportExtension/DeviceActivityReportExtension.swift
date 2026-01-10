@@ -14,20 +14,20 @@ import os.log
 class DeviceActivityReportExtension: DeviceActivityReportExtension {
     func createReport(with configuration: DeviceActivityReportConfiguration) async throws -> DeviceActivityReport {
         logger.debug("Creating device activity report")
-        return ThinkFastUsageReport(configuration: configuration)
+        return IntentlyUsageReport(configuration: configuration)
     }
 
     private let logger = Logger(subsystem: "dev.sadakat.thinkfast.extension", category: "Report")
 }
 
 // MARK: - Think Fast Usage Report
-struct ThinkFastUsageReport: DeviceActivityReport {
+struct IntentlyUsageReport: DeviceActivityReport {
     let configuration: DeviceActivityReportConfiguration
 
     func renderReport(context: DeviceActivityReportContext) async throws -> String {
         logger.debug("Rendering report")
 
-        var report = "ThinkFast Usage Report\n"
+        var report = "Intently Usage Report\n"
         report += "========================\n\n"
 
         let dataSegments = await context.dataSegments

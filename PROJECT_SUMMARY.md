@@ -1,4 +1,4 @@
-# ThinkFast iOS Project - Phase 1 Summary
+# Intently iOS Project - Phase 1 Summary
 
 > **Date**: 2025-01-01
 > **Status**: Phase 1 Complete - Project Foundation Established
@@ -11,10 +11,10 @@
 ### Project Structure
 
 ```
-/Users/fahad/myLab/XCP/TF/ThinkFast/
-├── ThinkFast/
+/Users/fahad/myLab/XCP/TF/Intently/
+├── Intently/
 │   ├── App/
-│   │   ├── ThinkFastApp.swift          ✅ Main app entry point
+│   │   ├── IntentlyApp.swift          ✅ Main app entry point
 │   │   └── AppDelegate.swift           ✅ App lifecycle & Firebase setup
 │   ├── Data/
 │   │   ├── Local/Database/             ✅ 7 Swift Data models
@@ -53,7 +53,7 @@
 ### Core Application
 | File | Description |
 |------|-------------|
-| `ThinkFastApp.swift` | Main app entry point with SwiftData container |
+| `IntentlyApp.swift` | Main app entry point with SwiftData container |
 | `AppDelegate.swift` | Firebase & Facebook SDK configuration |
 
 ### Database Models (7 entities)
@@ -191,7 +191,7 @@ Data/Local/FamilyControlsManager.swift
 
 ### Option 1: Create Xcode Project
 ```bash
-cd /Users/fahad/myLab/XCP/TF/ThinkFast
+cd /Users/fahad/myLab/XCP/TF/Intently
 
 # Create Xcode project manually or use xcodegen
 # Then add all created .swift files
@@ -254,7 +254,7 @@ swift test
 
 ```bash
 # Navigate to project
-cd /Users/fahad/myLab/XCP/TF/ThinkFast
+cd /Users/fahad/myLab/XCP/TF/Intently
 
 # Count Swift files
 find . -name "*.swift" | wc -l
@@ -263,7 +263,7 @@ find . -name "*.swift" | wc -l
 find . -name "*.swift" -exec wc -l {} + | tail -1
 
 # Open in Xcode (after creating .xcodeproj)
-open ThinkFast.xcodeproj
+open Intently.xcodeproj
 ```
 
 ---
@@ -273,8 +273,8 @@ open ThinkFast.xcodeproj
 When continuing, reference:
 - **Plan**: `/Users/fahad/myLab/XCP/TF/iOS_CONVERSION_PLAN.md`
 - **Quick Ref**: `/Users/fahad/myLab/XCP/TF/QUICK_REFERENCE.md`
-- **This Summary**: `/Users/fahad/myLab/XCP/TF/ThinkFast/PROJECT_SUMMARY.md`
-- **Source**: `/Users/fahad/myLab/ThinkFast`
+- **This Summary**: `/Users/fahad/myLab/XCP/TF/Intently/PROJECT_SUMMARY.md`
+- **Source**: `/Users/fahad/myLab/Intently`
 
 **Start with**: Phase 2 - Repository Implementations
 

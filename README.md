@@ -1,10 +1,10 @@
-# ThinkFast iOS
+# Intently iOS
 
 A digital wellbeing app for iOS that helps users reduce excessive app usage through mindful intervention and behavioral change techniques.
 
 ## Overview
 
-ThinkFast helps users build healthier digital habits by:
+Intently helps users build healthier digital habits by:
 - Setting daily usage goals for apps
 - Providing gentle interventions when limits are approached
 - Tracking streaks and progress
@@ -34,10 +34,10 @@ ThinkFast helps users build healthier digital habits by:
 
 ```bash
 # Clone or navigate to project
-cd /Users/fahad/myLab/XCP/TF/ThinkFast
+cd /Users/fahad/myLab/XCP/TF/Intently
 
 # Open in Xcode
-open ThinkFast.xcodeproj
+open Intently.xcodeproj
 
 # Or build with SPM
 swift build
@@ -46,7 +46,7 @@ swift build
 ## Project Structure
 
 ```
-ThinkFast/
+Intently/
 ├── App/                    # App entry point & lifecycle
 ├── Data/                   # Data layer (repositories, database)
 │   ├── Local/Database/     # Swift Data models
@@ -105,4 +105,4 @@ This is a personal project. Reference the conversion plan:
 
 ## License
 
-Copyright © 2025 ThinkFast. All rights reserved.
+Copyright © 2025 Intently. All rights reserved.

@@ -4,15 +4,15 @@
 import PackageDescription
 
 let package = Package(
-    name: "ThinkFast",
+    name: "Intently",
     defaultLocalization: "en",
     platforms: [
         .iOS(.v17)
     ],
     products: [
         .library(
-            name: "ThinkFast",
-            targets: ["ThinkFast"]),
+            name: "Intently",
+            targets: ["Intently"]),
     ],
     dependencies: [
         // Firebase
@@ -28,7 +28,7 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "ThinkFast",
+            name: "Intently",
             dependencies: [
                 // Firebase
                 .product(name: "FirebaseAnalytics", package: "firebase-ios-sdk"),
@@ -39,12 +39,12 @@ let package = Package(
                 .product(name: "FacebookLogin", package: "facebook-ios-sdk"),
                 .product(name: "FacebookCore", package: "facebook-ios-sdk"),
             ],
-            path: "ThinkFast"
+            path: "Intently"
         ),
         .testTarget(
-            name: "ThinkFastTests",
-            dependencies: ["ThinkFast"],
-            path: "ThinkFastTests"
+            name: "IntentlyTests",
+            dependencies: ["Intently"],
+            path: "IntentlyTests"
         ),
     ]
 )
