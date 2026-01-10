@@ -17,16 +17,16 @@ import Foundation
 /// Tracks progress from Day 1 to Day 7 with rewards and milestones
 struct OnboardingQuest: Codable, Equatable {
     /// Whether the quest is currently active
-    var isActive: Bool
+    var isActive: Bool = false
 
     /// Current quest day (1-7), or 0 if not active
-    var currentDay: Int
+    var currentDay: Int = 0
 
     /// Total quest days (always 7)
-    var totalDays: Int
+    var totalDays: Int = 7
 
     /// Number of completed days
-    var daysCompleted: Int
+    var daysCompleted: Int = 0
 
     /// Progress percentage (0.0 to 1.0)
     var progressPercentage: Double {
@@ -35,10 +35,10 @@ struct OnboardingQuest: Codable, Equatable {
     }
 
     /// Whether the entire quest is completed
-    var isCompleted: Bool
+    var isCompleted: Bool = false
 
     /// Next milestone message (e.g., "Complete today to unlock Day 3 reward!")
-    var nextMilestone: String?
+    var nextMilestone: String? = nil
 
     /// Create a quest with default values
     static func create(
@@ -119,14 +119,14 @@ enum QuickWinType: String, Codable {
     }
 }
 
-// MARK: - User Baseline Model
+// MARK: - Baseline Comparison Info
 
-/// User Baseline Model
-/// Represents the user's calculated baseline from their first week of usage
+/// Baseline Comparison Info
+/// Lightweight struct for baseline comparison UI display
 ///
-/// Used for comparison and motivation after the first week
-/// Shows how the user is doing compared to their baseline and population average
-struct UserBaseline: Codable, Equatable {
+/// Used for displaying baseline comparisons in the UI.
+/// Works with the existing SwiftData UserBaseline model for persistence.
+struct BaselineComparisonInfo: Codable, Equatable {
     /// First week start date ("yyyy-MM-dd")
     var firstWeekStartDate: String
 
@@ -178,20 +178,34 @@ struct UserBaseline: Codable, Equatable {
         }
     }
 
-    /// Create baseline with values
+    /// Create baseline info with values
     static func create(
         firstWeekStartDate: String,
         firstWeekEndDate: String,
         averageDailyMinutes: Int,
         facebookAverageMinutes: Int = 0,
         instagramAverageMinutes: Int = 0
-    ) -> UserBaseline {
-        return UserBaseline(
+    ) -> BaselineComparisonInfo {
+        return BaselineComparisonInfo(
             firstWeekStartDate: firstWeekStartDate,
             firstWeekEndDate: firstWeekEndDate,
             averageDailyMinutes: averageDailyMinutes,
             facebookAverageMinutes: facebookAverageMinutes,
             instagramAverageMinutes: instagramAverageMinutes
+        )
+    }
+
+    /// Create from SwiftData UserBaseline model
+    static func from(userBaseline: UserBaseline) -> BaselineComparisonInfo? {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+
+        return BaselineComparisonInfo(
+            firstWeekStartDate: dateFormatter.string(from: userBaseline.firstWeekStartDate),
+            firstWeekEndDate: dateFormatter.string(from: userBaseline.calculationDate ?? userBaseline.firstWeekStartDate),
+            averageDailyMinutes: Int(userBaseline.averageDailyMinutes),
+            facebookAverageMinutes: Int(userBaseline.facebookAverageMinutes),
+            instagramAverageMinutes: Int(userBaseline.instagramAverageMinutes)
         )
     }
 }

@@ -68,8 +68,17 @@ final class StreakRecovery {
 
 // MARK: - Computed Properties
 extension StreakRecovery {
+    /// Calculate recovery target: 50% of previous streak OR 7 days, whichever is lower
+    /// Example: 20-day streak → recover in 7 days
+    ///          6-day streak → recover in 3 days
+    var calculatedRecoveryTarget: Int {
+        let halfStreak = max(previousStreak / 2, 1)
+        return min(halfStreak, 7)
+    }
+
     var recoveryProgress: Double {
-        return Double(currentRecoveryDays) / Double(requiredRecoveryDays)
+        let target = calculatedRecoveryTarget
+        return min(Double(currentRecoveryDays) / Double(target), 1.0)
     }
 
     var isRecoveryInProgress: Bool {
@@ -77,7 +86,8 @@ extension StreakRecovery {
     }
 
     var daysRemaining: Int {
-        return max(0, requiredRecoveryDays - currentRecoveryDays)
+        let target = calculatedRecoveryTarget
+        return max(0, target - currentRecoveryDays)
     }
 
     var progressMessage: String {
@@ -86,7 +96,97 @@ extension StreakRecovery {
         } else if currentRecoveryDays == 0 {
             return "Start your recovery"
         } else {
-            return "\(currentRecoveryDays)/\(requiredRecoveryDays) days"
+            return "\(currentRecoveryDays)/\(calculatedRecoveryTarget) days"
+        }
+    }
+
+    /// Get contextual recovery message based on current progress
+    var recoveryMessage: String {
+        let target = calculatedRecoveryTarget
+        let remaining = target - currentRecoveryDays
+
+        if isRecoveryComplete {
+            return "You're back on track! 🎉"
+        } else if currentRecoveryDays == 0 {
+            return "Your \(previousStreak)-day streak was amazing! You're 1 day away from getting back on track."
+        } else if remaining == 1 {
+            return "Just 1 day until you're back on track!"
+        } else if remaining > 1 {
+            return "\(remaining) days until you're back on track!"
+        } else {
+            return "Almost there! Keep going!"
+        }
+    }
+
+    /// Get shortened message for cards
+    var shortMessage: String {
+        let target = calculatedRecoveryTarget
+        let remaining = target - currentRecoveryDays
+
+        if isRecoveryComplete {
+            return "Back on track!"
+        } else if currentRecoveryDays == 0 {
+            return "Start your comeback today"
+        } else if remaining == 1 {
+            return "1 more day!"
+        } else {
+            return "\(remaining) more days"
+        }
+    }
+
+    /// Check if current day count is a recovery milestone (1, 3, 7, 14 days)
+    func isRecoveryMilestone(days: Int) -> Bool {
+        return [1, 3, 7, 14].contains(days)
+    }
+
+    /// Check if today is a recovery day that should trigger notification
+    var shouldNotifyToday: Bool {
+        guard !isRecoveryComplete else { return false }
+
+        // Check if we've already reminded today
+        let calendar = Calendar.current
+        if let lastReminder = lastReminderDate {
+            let today = calendar.startOfDay(for: Date())
+            let reminderDay = calendar.startOfDay(for: lastReminder)
+            if today == reminderDay {
+                return false
+            }
+        }
+
+        // Notify on milestone days
+        return isRecoveryMilestone(days: currentRecoveryDays)
+    }
+}
+
+// MARK: - Streak Freeze Status
+/// Represents the status of streak freeze functionality
+struct StreakFreezeStatus: Codable {
+    let freezesAvailable: Int
+    let maxFreezes: Int
+    let hasActiveFreeze: Bool
+    let freezeActivationDate: Date?
+    let canUseFreeze: Bool
+
+    /// Get display text for freeze count
+    var freezeCountText: String {
+        return "\(freezesAvailable)/\(maxFreezes)"
+    }
+
+    /// Check if user is out of freezes
+    var isOutOfFreezes: Bool {
+        return freezesAvailable <= 0
+    }
+
+    /// Get freeze icon based on availability
+    var freezeIcon: String {
+        if freezesAvailable > 2 {
+            return "❄️❄️❄️"
+        } else if freezesAvailable == 2 {
+            return "❄️❄️"
+        } else if freezesAvailable == 1 {
+            return "❄️"
+        } else {
+            return "💔"
         }
     }
 }

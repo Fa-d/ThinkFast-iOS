@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import FamilyControls
 
 struct ManageAppsView: View {
     @Environment(\.dependencies) private var dependencies
@@ -15,6 +16,8 @@ struct ManageAppsView: View {
     @State private var viewModel: ManageAppsViewModel?
     @State private var showingPopularOnly = false
     @State private var showingGoalSetup = false
+    @State private var showingAppPicker = false
+    @State private var familyActivitySelection = FamilyActivitySelection()
 
     var onAppsSelected: (([TrackedApp]) -> Void)? = nil
 
@@ -27,29 +30,55 @@ struct ManageAppsView: View {
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
-                // Search Bar
-                searchBar
+                // Info header
+                VStack(spacing: AppTheme.Spacing.md) {
+                    Image(systemName: "app.badge.checkmark.fill")
+                        .font(.system(size: 50))
+                        .foregroundColor(.appPrimary)
+                        .padding(.top, AppTheme.Spacing.lg)
+
+                    Text("Select Apps to Track")
+                        .font(.title2)
+                        .fontWeight(.bold)
+
+                    Text("Choose the apps you want to set daily usage goals for. You'll be able to set specific time limits after selection.")
+                        .font(.subheadline)
+                        .foregroundColor(.appTextSecondary)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal, AppTheme.Spacing.xl)
+                        .padding(.bottom, AppTheme.Spacing.sm)
+
+                    // Help text
+                    HStack(spacing: AppTheme.Spacing.sm) {
+                        Image(systemName: "info.circle.fill")
+                            .foregroundColor(.appPrimary)
+                            .font(.caption)
+
+                        Text("Default goal: 60 minutes per day")
+                            .font(.caption)
+                            .foregroundColor(.appTextSecondary)
+                    }
+                    .padding(.horizontal)
+                    .padding(.vertical, AppTheme.Spacing.xs)
+                    .background(Color.appSecondaryBackground.opacity(0.5))
+                    .cornerRadius(AppTheme.CornerRadius.md)
+                    .padding(.bottom, AppTheme.Spacing.md)
+                }
+                .padding(.horizontal)
 
                 Divider()
 
-                if let viewModel = viewModel {
-                    if viewModel.isLoading {
-                        Spacer()
-                        ProgressView("Loading apps...")
-                        Spacer()
-                    } else if viewModel.filteredApps.isEmpty {
-                        emptyState
-                    } else {
-                        appsContent
-
-                        // Help text at bottom
-                        helpText
-                    }
-                } else {
-                    ProgressView("Loading...")
-                }
+                #if targetEnvironment(simulator)
+                // Simulator fallback - show predefined apps
+                simulatorAppsList
+                #else
+                // Real device - use FamilyActivityPicker
+                FamilyActivityPicker(selection: $familyActivitySelection)
+                    .edgesIgnoringSafeArea(.bottom)
+                #endif
             }
-            .navigationTitle("Tracked Apps")
+            .navigationTitle("Track Apps")
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button("Cancel") {
@@ -58,19 +87,16 @@ struct ManageAppsView: View {
                 }
 
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    if let viewModel = viewModel {
-                        Button("\(viewModel.selectedApps.count) Done") {
-                            saveAndDismiss()
-                        }
-                        .fontWeight(.semibold)
-                        .disabled(viewModel.selectedApps.isEmpty)
-                    } else {
-                        Button("Done") {
-                            saveAndDismiss()
-                        }
-                        .fontWeight(.semibold)
-                        .disabled(true)
+                    Button("Done") {
+                        saveAndDismiss()
                     }
+                    .fontWeight(.semibold)
+                    #if targetEnvironment(simulator)
+                    .disabled(viewModel?.selectedApps.isEmpty ?? true)
+                    #else
+                    .disabled(familyActivitySelection.applicationTokens.isEmpty &&
+                             familyActivitySelection.categoryTokens.isEmpty)
+                    #endif
                 }
             }
         }
@@ -81,109 +107,51 @@ struct ManageAppsView: View {
                     goalRepository: dependencies.goalRepository
                 )
             }
+            loadCurrentSelection()
         }
         .task {
+            // Load existing goals and mark apps as selected
             await viewModel?.loadData()
         }
     }
 
+    // MARK: - Load Current Selection
+    private func loadCurrentSelection() {
+        // Note: FamilyActivitySelection is automatically persisted by the system
+        // We don't need to manually save/load it
+    }
+
     // MARK: - Save and Dismiss
     private func saveAndDismiss() {
-        guard let viewModel = viewModel else { return }
+        Task {
+            #if targetEnvironment(simulator)
+            // Simulator: Use ManageAppsViewModel to save changes
+            try? await viewModel?.saveChanges()
 
-        // Get the selected apps
-        let selectedApps = viewModel.availableApps.filter { app in
-            viewModel.selectedApps.contains(app.id)
-        }
+            // Get selected apps for callback
+            let selectedApps = viewModel?.getSelectedApps() ?? []
+            onAppsSelected?(selectedApps)
+            #else
+            // Real device: Convert FamilyActivityPicker tokens to goals
+            await saveSelectedAppsAsGoals()
+            onAppsSelected?([])
+            #endif
 
-        // Notify callback with selected apps
-        onAppsSelected?(selectedApps)
-
-        dismiss()
-    }
-
-    // MARK: - Search Bar
-    private var searchBar: some View {
-        HStack(spacing: AppTheme.Spacing.sm) {
-            Image(systemName: "magnifyingglass")
-                .foregroundColor(.appTextSecondary)
-
-            TextField("Search apps", text: Binding(
-                get: { viewModel?.searchQuery ?? "" },
-                set: { viewModel?.searchQuery = $0 }
-            ))
-                .textFieldStyle(.plain)
-
-            if !(viewModel?.searchQuery.isEmpty ?? true) {
-                Button(action: { viewModel?.searchQuery = "" }) {
-                    Image(systemName: "xmark.circle.fill")
-                        .foregroundColor(.appTextSecondary)
-                }
+            // Dismiss the view
+            await MainActor.run {
+                dismiss()
             }
         }
-        .padding(AppTheme.Spacing.md)
-        .background(Color.appSecondaryBackground)
     }
 
-    // MARK: - Apps Content
-    private var appsContent: some View {
+    // MARK: - Simulator Apps List
+    private var simulatorAppsList: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: AppTheme.Spacing.lg) {
-                // Popular Apps Section
-                if !(viewModel?.searchQuery.isEmpty ?? true) {
-                    popularAppsSection
-                }
-
-                // All Apps by Category
-                ForEach(AppCategory.allCases, id: \.self) { category in
-                    if let apps = viewModel?.categorizedApps[category], !apps.isEmpty {
-                        categorySection(category, apps: apps)
-                    }
-                }
-            }
-            .padding()
-        }
-    }
-
-    // MARK: - Popular Apps
-    private var popularAppsSection: some View {
-        VStack(alignment: .leading, spacing: AppTheme.Spacing.md) {
-            Text("Popular")
-                .font(.headline)
-                .padding(.horizontal)
-
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: AppTheme.Spacing.md) {
-                    ForEach(viewModel?.availableApps.filter { $0.isRecommended } ?? [], id: \.id) { app in
-                        let isAppSelected = viewModel?.selectedApps.contains(app.id) ?? false
-                        PopularAppCard(
-                            app: app,
-                            isSelected: isAppSelected
-                        ) {
-                            Task {
-                                await viewModel?.toggleApp(app)
-                            }
-                        }
-                    }
-                }
-                .padding(.horizontal)
-            }
-        }
-    }
-
-    // MARK: - Category Section
-    private func categorySection(_ category: AppCategory, apps: [TrackedApp]) -> some View {
-        VStack(alignment: .leading, spacing: AppTheme.Spacing.md) {
-            Text(category.rawValue)
-                .font(.headline)
-                .foregroundColor(.appTextSecondary)
-
             VStack(spacing: AppTheme.Spacing.sm) {
-                ForEach(apps, id: \.id) { app in
-                    let isAppSelected = viewModel?.selectedApps.contains(app.id) ?? false
-                    AppListRow(
+                ForEach(simulatorApps, id: \.id) { app in
+                    SimulatorAppRow(
                         app: app,
-                        isSelected: isAppSelected
+                        isSelected: viewModel?.selectedApps.contains(app.id) ?? false
                     ) {
                         Task {
                             await viewModel?.toggleApp(app)
@@ -191,56 +159,65 @@ struct ManageAppsView: View {
                     }
                 }
             }
+            .padding()
         }
     }
 
-    // MARK: - Empty State
-    private var emptyState: some View {
-        VStack(spacing: AppTheme.Spacing.lg) {
-            Image(systemName: "magnifyingglass")
-                .font(.system(size: 60))
-                .foregroundColor(.appTextTertiary)
-
-            Text("No apps found")
-                .font(.headline)
-
-            Text("Try a different search term")
-                .font(.subheadline)
-                .foregroundColor(.appTextSecondary)
-        }
-        .padding()
+    private var simulatorApps: [TrackedApp] {
+        return [
+            TrackedApp(id: "com.facebook.Facebook", name: "Facebook", icon: "facebook.fill", category: .social, isEnabled: true, isSelected: false, isRecommended: true),
+            TrackedApp(id: "com.instagram.Instagram", name: "Instagram", icon: "instagram", category: .social, isEnabled: true, isSelected: false, isRecommended: true),
+            TrackedApp(id: "com.zhiliaoapp.musically", name: "TikTok", icon: "music.note", category: .entertainment, isEnabled: true, isSelected: false, isRecommended: true),
+            TrackedApp(id: "com.atebits.Tweetie2", name: "X (Twitter)", icon: "at", category: .social, isEnabled: true, isSelected: false, isRecommended: false),
+            TrackedApp(id: "com.google.ios.youtube", name: "YouTube", icon: "play.rectangle.fill", category: .entertainment, isEnabled: true, isSelected: false, isRecommended: true),
+            TrackedApp(id: "com.toyopagroup.picaboo", name: "Snapchat", icon: "camera.fill", category: .social, isEnabled: true, isSelected: false, isRecommended: false),
+            TrackedApp(id: "com.reddit.Reddit", name: "Reddit", icon: "arrow.up.circle", category: .social, isEnabled: true, isSelected: false, isRecommended: false),
+            TrackedApp(id: "com.netflix.Netflix", name: "Netflix", icon: "tv.fill", category: .entertainment, isEnabled: true, isSelected: false, isRecommended: false),
+        ]
     }
 
-    // MARK: - Help Text
-    private var helpText: some View {
-        VStack(spacing: AppTheme.Spacing.sm) {
-            Divider()
+    // MARK: - Save Selected Apps as Goals
+    private func saveSelectedAppsAsGoals() async {
+        let goalRepository = dependencies.goalRepository
 
-            HStack(spacing: AppTheme.Spacing.sm) {
-                Image(systemName: "info.circle.fill")
-                    .foregroundColor(.appPrimary)
-                    .font(.caption)
+        // Get all existing goals
+        let existingGoals = (try? await goalRepository.getAllGoals()) ?? []
 
-                VStack(alignment: .leading, spacing: 2) {
-                    Text("Deselect apps to remove them from tracking")
-                        .font(.caption)
-                        .foregroundColor(.appTextSecondary)
+        // Create a set of bundle IDs from selected apps
+        let selectedBundleIds = Set(familyActivitySelection.applicationTokens.map { token in
+            // Note: ApplicationToken doesn't directly expose bundle ID for privacy
+            // We'll use the token's hash as a unique identifier
+            "app_\(token.hashValue)"
+        })
 
-                    Text("Your goals will be updated when you tap Done")
-                        .font(.caption2)
-                        .foregroundColor(.appTextTertiary)
-                }
-
-                Spacer()
+        // Delete goals for apps that are no longer selected
+        for goal in existingGoals {
+            if goal.targetApp.starts(with: "app_") && !selectedBundleIds.contains(goal.targetApp) {
+                try? await goalRepository.deleteGoal(for: goal.targetApp)
             }
-            .padding(AppTheme.Spacing.md)
         }
-        .background(Color.appSecondaryBackground.opacity(0.5))
+
+        // Create goals for newly selected apps
+        for token in familyActivitySelection.applicationTokens {
+            let appId = "app_\(token.hashValue)"
+
+            // Check if goal already exists
+            if (try? await goalRepository.getGoal(for: appId)) == nil {
+                // Create new goal with default 60 minute limit
+                // Note: We use the hash as the name since we can't get the app name directly
+                try? await goalRepository.setGoal(
+                    for: appId,
+                    appName: "App \(abs(token.hashValue) % 1000)", // Temporary name
+                    dailyLimitMinutes: 60
+                )
+            }
+        }
     }
+
 }
 
-// MARK: - App List Row
-struct AppListRow: View {
+// MARK: - Simulator App Row
+struct SimulatorAppRow: View {
     let app: TrackedApp
     let isSelected: Bool
     let onToggle: () -> Void
@@ -283,37 +260,6 @@ struct AppListRow: View {
             .padding(AppTheme.Spacing.sm)
             .background(Color.appSecondaryBackground.opacity(isSelected ? 0.5 : 0.1))
             .cornerRadius(AppTheme.CornerRadius.md)
-        }
-        .buttonStyle(PlainButtonStyle())
-    }
-}
-
-// MARK: - Popular App Card
-struct PopularAppCard: View {
-    let app: TrackedApp
-    let isSelected: Bool
-    let onToggle: () -> Void
-
-    var body: some View {
-        Button(action: onToggle) {
-            VStack(spacing: AppTheme.Spacing.sm) {
-                ZStack(alignment: .topTrailing) {
-                    AppIconView(appName: app.name, size: 60)
-
-                    if isSelected {
-                        Image(systemName: "checkmark.circle.fill")
-                            .foregroundColor(.appPrimary)
-                            .font(.title3)
-                            .padding(-4)
-                    }
-                }
-
-                Text(app.name)
-                    .font(.caption)
-                    .fontWeight(.medium)
-                    .lineLimit(1)
-            }
-            .frame(width: 90)
         }
         .buttonStyle(PlainButtonStyle())
     }

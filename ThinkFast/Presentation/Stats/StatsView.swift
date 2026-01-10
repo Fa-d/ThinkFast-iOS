@@ -30,6 +30,9 @@ struct StatsView: View {
                             } else if viewModel.dailyStats.isEmpty {
                                 emptyState
                             } else {
+                                // Charts
+                                chartsSection
+
                                 // Stats Cards
                                 statsCards
 
@@ -57,6 +60,14 @@ struct StatsView: View {
         }
         .task {
             await viewModel?.loadData()
+        }
+    }
+
+    // MARK: - Charts Section
+    private var chartsSection: some View {
+        VStack(spacing: AppTheme.Spacing.lg) {
+            // TODO: Re-enable charts after adding chart files to Xcode project
+            EmptyView()
         }
     }
 

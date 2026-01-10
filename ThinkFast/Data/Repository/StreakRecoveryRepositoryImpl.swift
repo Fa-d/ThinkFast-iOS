@@ -45,6 +45,16 @@ final class StreakRecoveryRepositoryImpl: StreakRecoveryRepository {
         return try context.fetch(descriptor)
     }
 
+    func saveRecovery(_ recovery: StreakRecovery) async throws {
+        context.insert(recovery)
+        try context.save()
+    }
+
+    func updateRecovery(_ recovery: StreakRecovery) async throws {
+        recovery.lastModified = Date()
+        try context.save()
+    }
+
     func updateRecoveryProgress(for app: String, completedDay: Bool) async throws {
         guard let recovery = try await getRecovery(for: app) else { return }
         if completedDay {

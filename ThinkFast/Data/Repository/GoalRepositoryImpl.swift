@@ -16,14 +16,25 @@ final class GoalRepositoryImpl: GoalRepository {
     }
 
     func setGoal(for app: String, appName: String?, dailyLimitMinutes: Int) async throws {
-        let goal = Goal(
-            targetApp: app,
-            targetAppName: appName,
-            dailyLimitMinutes: dailyLimitMinutes,
-            startDate: Date()
-        )
-        context.insert(goal)
-        try context.save()
+        // Check if goal already exists
+        if let existingGoal = try await getGoal(for: app) {
+            // Update existing goal instead of creating a new one
+            existingGoal.targetAppName = appName
+            existingGoal.dailyLimitMinutes = dailyLimitMinutes
+            existingGoal.isEnabled = true
+            existingGoal.lastModified = Date()
+            try context.save()
+        } else {
+            // Create new goal
+            let goal = Goal(
+                targetApp: app,
+                targetAppName: appName,
+                dailyLimitMinutes: dailyLimitMinutes,
+                startDate: Date()
+            )
+            context.insert(goal)
+            try context.save()
+        }
     }
 
     func getGoal(for app: String) async throws -> Goal? {

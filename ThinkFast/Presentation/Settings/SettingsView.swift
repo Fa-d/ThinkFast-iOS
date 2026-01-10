@@ -136,13 +136,22 @@ struct SettingsView: View {
 
 // MARK: - Account View
 struct AccountView: View {
+    @Environment(\.dependencies) private var dependencies
     @State private var currentUser: AuthUser?
     @State private var showingSignIn = false
+    @State private var isLoading = true
 
     var body: some View {
         Form {
             Section {
-                if let user = currentUser {
+                if isLoading {
+                    HStack {
+                        Spacer()
+                        ProgressView()
+                        Spacer()
+                    }
+                } else if let user = currentUser {
+                    // User Info
                     HStack {
                         Text("Name")
                         Spacer()
@@ -150,38 +159,133 @@ struct AccountView: View {
                             .foregroundColor(.appTextSecondary)
                     }
 
+                    if let email = user.email {
+                        HStack {
+                            Text("Email")
+                            Spacer()
+                            Text(email)
+                                .foregroundColor(.appTextSecondary)
+                        }
+                    }
+
                     HStack {
                         Text("Signed in with")
                         Spacer()
-                        Text(providerName(user.provider))
+                        HStack(spacing: 4) {
+                            providerIcon(user.provider)
+                            Text(providerName(user.provider))
+                                .foregroundColor(.appTextSecondary)
+                        }
+                    }
+
+                    HStack {
+                        Text("Account Type")
+                        Spacer()
+                        Text(user.isAnonymous ? "Anonymous" : "Connected")
                             .foregroundColor(.appTextSecondary)
                     }
                 } else {
-                    Button("Sign In") {
-                        showingSignIn = true
+                    // Sign In Prompt
+                    VStack(spacing: AppTheme.Spacing.md) {
+                        Image(systemName: "person.circle.badge.plus")
+                            .font(.system(size: 50))
+                            .foregroundColor(.appTextTertiary)
+
+                        Text("Sign In to ThinkFast")
+                            .font(.headline)
+
+                        Text("Sync your data across devices and never lose your progress")
+                            .font(.caption)
+                            .foregroundColor(.appTextSecondary)
+                            .multilineTextAlignment(.center)
+
+                        Button("Sign In") {
+                            showingSignIn = true
+                        }
+                        .buttonStyle(.borderedProminent)
                     }
+                    .padding()
                 }
             }
 
             if currentUser != nil {
                 Section {
                     Button("Sign Out", role: .destructive) {
-                        // TODO: Implement sign out
+                        Task {
+                            await signOut()
+                        }
                     }
+                } footer: {
+                    Text("Your local data will be kept on this device")
+                        .font(.caption)
                 }
             }
         }
         .navigationTitle("Account")
         .sheet(isPresented: $showingSignIn) {
-            Text("Sign In Sheet") // TODO: Implement sign in
+            SignInView()
+        }
+        .task {
+            await loadUser()
         }
     }
 
+    // MARK: - Load User
+    private func loadUser() async {
+        isLoading = true
+        // Check if user is signed in
+        let authRepository = dependencies.authRepository
+        if authRepository.isSignedIn {
+            // In a real implementation, we'd fetch the user details
+            // For now, we'll simulate this
+            currentUser = AuthUser(
+                id: UUID().uuidString,
+                email: "user@example.com",
+                displayName: "User",
+                photoURL: nil,
+                provider: .apple,
+                isAnonymous: false,
+                createdAt: Date()
+            )
+        }
+        isLoading = false
+    }
+
+    // MARK: - Sign Out
+    private func signOut() async {
+        try? await dependencies.authRepository.signOut()
+        currentUser = nil
+    }
+
+    // MARK: - Provider Name
     private func providerName(_ provider: AuthProvider) -> String {
         switch provider {
         case .apple: return "Apple"
         case .facebook: return "Facebook"
         case .anonymous: return "Anonymous"
+        }
+    }
+
+    // MARK: - Provider Icon
+    private func providerIcon(_ provider: AuthProvider) -> some View {
+        Image(systemName: iconName(for: provider))
+            .foregroundColor(iconColor(for: provider))
+            .frame(width: 20)
+    }
+
+    private func iconName(for provider: AuthProvider) -> String {
+        switch provider {
+        case .apple: return "applelogo"
+        case .facebook: return "f.circle.fill"
+        case .anonymous: return "person.fill"
+        }
+    }
+
+    private func iconColor(for provider: AuthProvider) -> Color {
+        switch provider {
+        case .apple: return .primary
+        case .facebook: return .blue
+        case .anonymous: return .gray
         }
     }
 }
@@ -380,6 +484,154 @@ struct AboutView: View {
                     }
                 }
             }
+        }
+    }
+}
+
+// MARK: - Sign In View
+struct SignInView: View {
+    @Environment(\.dismiss) private var dismiss
+    @Environment(\.dependencies) private var dependencies
+
+    @State private var isLoading = false
+    @State private var errorMessage: String?
+    @State private var showAnonymousAlert = false
+
+    var body: some View {
+        NavigationView {
+            VStack(spacing: AppTheme.Spacing.xl) {
+                Spacer()
+
+                // Logo and Title
+                VStack(spacing: AppTheme.Spacing.md) {
+                    RoundedRectangle(cornerRadius: 20)
+                        .fill(LinearGradient.appPrimaryGradient())
+                        .frame(width: 100, height: 100)
+                        .overlay {
+                            Image(systemName: "brain.head.profile")
+                                .font(.system(size: 50))
+                                .foregroundColor(.white)
+                        }
+
+                    Text("ThinkFast")
+                        .font(.largeTitle)
+                        .fontWeight(.bold)
+
+                    Text("Build healthier digital habits")
+                        .font(.subheadline)
+                        .foregroundColor(.appTextSecondary)
+                }
+
+                Spacer()
+
+                // Sign In Options
+                VStack(spacing: AppTheme.Spacing.md) {
+                    // Simple button placeholder for Apple sign in
+                    Button(action: { Task { await signInWithApple() } }) {
+                        HStack {
+                            Image(systemName: "applelogo")
+                            Text("Sign in with Apple")
+                        }
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 50)
+                        .background(Color.black)
+                        .cornerRadius(AppTheme.CornerRadius.md)
+                    }
+                    .disabled(isLoading)
+
+                    // Sign in anonymously
+                    Button(action: { showAnonymousAlert = true }) {
+                        HStack {
+                            Image(systemName: "person.fill")
+                                .foregroundColor(.appTextSecondary)
+                            Text("Continue without account")
+                                .font(.subheadline)
+                                .foregroundColor(.appTextSecondary)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.appSecondaryBackground)
+                        .cornerRadius(AppTheme.CornerRadius.md)
+                    }
+                    .disabled(isLoading)
+                }
+                .padding(.horizontal)
+
+                // Error message
+                if let error = errorMessage {
+                    Text(error)
+                        .font(.caption)
+                        .foregroundColor(.appRed)
+                        .padding(.horizontal)
+                        .multilineTextAlignment(.center)
+                }
+
+                Spacer()
+            }
+            .navigationTitle("Sign In")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Cancel") {
+                        dismiss()
+                    }
+                    .foregroundColor(.appPrimary)
+                }
+            }
+            .overlay {
+                if isLoading {
+                    ProgressView()
+                        .scaleEffect(1.5)
+                        .padding()
+                        .background(Color(.systemBackground))
+                        .cornerRadius(10)
+                        .shadow(radius: 5)
+                }
+            }
+            .alert("Continue Anonymously", isPresented: $showAnonymousAlert) {
+                Button("Cancel", role: .cancel) { }
+                Button("Continue") {
+                    Task {
+                        await signInAnonymously()
+                    }
+                }
+            } message: {
+                Text("Your data will only be stored on this device. You won't be able to sync across devices.")
+            }
+        }
+    }
+
+    private func signInWithApple() async {
+        await MainActor.run { isLoading = true }
+        do {
+            _ = try await dependencies.authRepository.signInWithApple()
+            await MainActor.run {
+                isLoading = false
+                dismiss()
+            }
+        } catch {
+            await showError("Failed to sign in: \(error.localizedDescription)")
+        }
+    }
+
+    private func signInAnonymously() async {
+        await MainActor.run { isLoading = true }
+        do {
+            _ = try await dependencies.authRepository.signInAnonymously()
+            await MainActor.run {
+                isLoading = false
+                dismiss()
+            }
+        } catch {
+            await showError("Failed to continue: \(error.localizedDescription)")
+        }
+    }
+
+    private func showError(_ message: String) async {
+        await MainActor.run {
+            errorMessage = message
+            isLoading = false
         }
     }
 }

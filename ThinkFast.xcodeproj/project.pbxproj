@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 77;
+	objectVersion = 63;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -123,10 +123,10 @@
 		1618ABC54D9E373D51B0C773 /* AdaptiveInterventionRateLimiter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptiveInterventionRateLimiter.swift; sourceTree = "<group>"; };
 		16C814CC2C26DD274F6007BC /* CloudKitSyncManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitSyncManager.swift; sourceTree = "<group>"; };
 		1799CF92F587D16BF0326CBE /* StopTrackingUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopTrackingUseCase.swift; sourceTree = "<group>"; };
-		1C0567776E1E1272785E136F /* ThinkFastTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = ThinkFastTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		1C0567776E1E1272785E136F /* ThinkFastTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = file; name = ThinkFastTests.xctest; path = ThinkFast.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1C25C60DFCABD673C09CF46D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		1D5185FB86DF720F9DCE3A20 /* ThinkFastUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = ThinkFastUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		2039E83AAFD7EF5BF27CA1CB /* ThinkFast.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = ThinkFast.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1D5185FB86DF720F9DCE3A20 /* ThinkFastUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = file; name = ThinkFastUITests.xctest; path = ThinkFast.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		2039E83AAFD7EF5BF27CA1CB /* ThinkFast.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ThinkFast.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		20E6B23D2F27764142A0017A /* ThinkFastApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThinkFastApp.swift; sourceTree = "<group>"; };
 		233C0A79D27B54AB4039F098 /* Goal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Goal.swift; sourceTree = "<group>"; };
 		2469ABAABEB03E443C54488B /* StatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsView.swift; sourceTree = "<group>"; };
@@ -162,7 +162,7 @@
 		81E996654A8907983E863FA1 /* JitaiInterventionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JitaiInterventionManager.swift; sourceTree = "<group>"; };
 		88534D3A787C83FF334EAF8D /* JitaiModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JitaiModels.swift; sourceTree = "<group>"; };
 		92AE22A2F405540C515123B5 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
-		98D80ADB8A49B1A525765D7D /* DeviceActivityReportExtension.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = DeviceActivityReportExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		98D80ADB8A49B1A525765D7D /* DeviceActivityReportExtension.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; name = DeviceActivityReportExtension.appex; path = ThinkFast.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		9D5E8F9C9666771E868B0CBA /* AuthRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthRepositoryImpl.swift; sourceTree = "<group>"; };
 		9EBC782D6365B06F0249502B /* StreakRecoveryRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreakRecoveryRepositoryImpl.swift; sourceTree = "<group>"; };
 		A37A4BF336583388C27C7A26 /* InterventionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterventionManager.swift; sourceTree = "<group>"; };
@@ -185,7 +185,7 @@
 		DC7A095A9544CA4558D90460 /* StreakRecoveryRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreakRecoveryRepository.swift; sourceTree = "<group>"; };
 		DD0ED30356B90D87BFAD4CBA /* ThinkFast.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ThinkFast.entitlements; sourceTree = "<group>"; };
 		E09F5D729EADC39DF36D01F7 /* StatsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsRepository.swift; sourceTree = "<group>"; };
-		EAE8656E5F32E9F4E1EA4B36 /* ThinkFastWidget.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = ThinkFastWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		EAE8656E5F32E9F4E1EA4B36 /* ThinkFastWidget.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; name = ThinkFastWidget.appex; path = ThinkFast.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		ECD84623448E7EB557380E68 /* UsageSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageSession.swift; sourceTree = "<group>"; };
 		ED2A3AA7D3A2EB1EE5C4D940 /* GoalRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalRepository.swift; sourceTree = "<group>"; };
 		F4051E221A9C0CE9FD055F4F /* UsageEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageEvent.swift; sourceTree = "<group>"; };
@@ -639,10 +639,6 @@
 						DevelopmentTeam = 3FKXUW9MS9;
 						ProvisioningStyle = Automatic;
 					};
-					6DC8462936FF34062D090C21 = {
-						DevelopmentTeam = 3FKXUW9MS9;
-						ProvisioningStyle = Automatic;
-					};
 					8EA718895DB0990B68CDA772 = {
 						DevelopmentTeam = 3FKXUW9MS9;
 						ProvisioningStyle = Automatic;
@@ -672,7 +668,6 @@
 				C6EF5F09FE2FF2544FD53E95 /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */,
 				92EAFF0BC18305DE05C2D8D4 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
-			preferredProjectObjectVersion = 77;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -1070,6 +1065,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = WS74Z7T525;
 				INFOPLIST_FILE = ThinkFast/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1118,13 +1114,16 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = ThinkFast/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = dev.sadakat.thinkfast;
+				PRODUCT_BUNDLE_IDENTIFIER = dev.sadakat.intently;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

@@ -74,40 +74,8 @@ struct HomeView: View {
     // MARK: - Handle Selected Apps
     private func handleAppsSelected(_ apps: [TrackedApp]) {
         Task {
-            let goalRepository = dependencies.goalRepository
-
-            // Get IDs of selected apps
-            let selectedAppIds = Set(apps.map { $0.id })
-
-            // Get all existing goals
-            let existingGoals = (try? await goalRepository.getAllGoals()) ?? []
-
-            // Delete goals for apps that are no longer selected
-            for goal in existingGoals {
-                if !selectedAppIds.contains(goal.targetApp) {
-                    try? await goalRepository.deleteGoal(for: goal.targetApp)
-                }
-            }
-
-            // Create/update goals for selected apps
-            for app in apps {
-                // Check if goal already exists
-                if let existingGoal = try? await goalRepository.getGoal(for: app.id) {
-                    // Goal exists, just enable it if disabled
-                    if !existingGoal.isEnabled {
-                        try? await goalRepository.toggleGoal(for: app.id, enabled: true)
-                    }
-                } else {
-                    // Create new goal with default 60 minute limit
-                    try? await goalRepository.setGoal(
-                        for: app.id,
-                        appName: app.name,
-                        dailyLimitMinutes: 60
-                    )
-                }
-            }
-
-            // Reload data
+            // Goal synchronization is now handled by ManageAppsViewModel.saveChanges()
+            // Just reload the data to show the updated goals
             await viewModel?.loadData()
         }
     }
