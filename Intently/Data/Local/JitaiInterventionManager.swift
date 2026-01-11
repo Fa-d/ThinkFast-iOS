@@ -13,12 +13,20 @@ import SwiftUI
 ///
 /// This manager integrates all JITAI components to provide intelligent,
 /// personalized intervention timing and content selection.
+///
+/// Enhanced with:
+/// - Burden tracking for fatigue management
+/// - Thompson Sampling for optimal content selection
+/// - Comprehensive outcome tracking
+/// - Decision logging for analytics
 final class JitaiInterventionManager: ObservableObject {
 
     // MARK: - Published Properties
     @Published var currentIntervention: InterventionContentModel?
     @Published var isShowingIntervention = false
     @Published var lastRateLimitResult: AdaptiveRateLimitResult?
+    @Published var currentBurdenLevel: BurdenLevel = .moderate
+    @Published var currentDecision: InterventionDecisionFull?
 
     // MARK: - Dependencies
     private let personaDetector: PersonaDetector
@@ -29,6 +37,20 @@ final class JitaiInterventionManager: ObservableObject {
     private let goalRepository: GoalRepository
     private let usageRepository: UsageRepository
     private let userDefaults: UserDefaults
+
+    // NEW: Advanced JITAI components
+    private let burdenTracker: InterventionBurdenTracker
+    private let thompsonSamplingEngine: ThompsonSamplingEngine
+    private let outcomeTracker: ComprehensiveOutcomeTracker
+    private let decisionLogger: DecisionLogger
+
+    // Delivery components (accessed via container to avoid circular dependency)
+    private var notificationScheduler: InterventionNotificationScheduler {
+        AppDependencyContainer.shared.notificationScheduler
+    }
+    private var liveActivityManager: InterventionLiveActivityManager {
+        AppDependencyContainer.shared.liveActivityManager
+    }
 
     // MARK: - State
     private var currentSessionStart: Date?
@@ -44,6 +66,10 @@ final class JitaiInterventionManager: ObservableObject {
         interventionResultRepository: InterventionResultRepository,
         goalRepository: GoalRepository,
         usageRepository: UsageRepository,
+        burdenTracker: InterventionBurdenTracker,
+        thompsonSamplingEngine: ThompsonSamplingEngine,
+        outcomeTracker: ComprehensiveOutcomeTracker,
+        decisionLogger: DecisionLogger,
         userDefaults: UserDefaults = .standard
     ) {
         self.personaDetector = personaDetector
@@ -53,6 +79,10 @@ final class JitaiInterventionManager: ObservableObject {
         self.interventionResultRepository = interventionResultRepository
         self.goalRepository = goalRepository
         self.usageRepository = usageRepository
+        self.burdenTracker = burdenTracker
+        self.thompsonSamplingEngine = thompsonSamplingEngine
+        self.outcomeTracker = outcomeTracker
+        self.decisionLogger = decisionLogger
         self.userDefaults = userDefaults
     }
 
@@ -325,5 +355,292 @@ final class JitaiInterventionManager: ObservableObject {
 
     private func logInfo(_ message: String) {
         print("[JitaiInterventionManager] INFO: \(message)")
+    }
+
+    // MARK: - Enhanced Public Methods (New)
+
+    /// Get current burden level
+    func getCurrentBurdenLevel() async -> BurdenLevel {
+        let metrics = await burdenTracker.calculateCurrentBurdenMetrics()
+        var mutableMetrics = metrics
+        let level = mutableMetrics.calculateBurdenLevel()
+        await MainActor.run {
+            currentBurdenLevel = level
+        }
+        return currentBurdenLevel
+    }
+
+    /// Get comprehensive intervention decision with all JITAI factors
+    /// - Parameters:
+    ///   - app: Target app bundle ID
+    ///   - currentUsage: Current session duration in milliseconds
+    ///   - interventionType: Type of intervention to check for
+    /// - Returns: Full intervention decision with rich context
+    func getInterventionDecision(
+        for app: String,
+        currentUsage: TimeInterval,
+        interventionType: JitaiInterventionType = .reminder
+    ) async -> InterventionDecisionFull {
+        // Build context
+        guard let context = await buildInterventionContext(
+            targetApp: app,
+            currentUsage: currentUsage,
+            interventionType: interventionType
+        ) else {
+            return InterventionDecisionFull(
+                shouldShow: false,
+                reason: "Failed to build context",
+                opportunityScore: 0,
+                burdenLevel: .moderate,
+                recommendedCooldown: 300_000,  // 5 minutes default
+                persona: nil,
+                decisionSource: "context_build_failed"
+            )
+        }
+
+        // Get persona detection
+        let personaDetection = await personaDetector.detectPersona()
+
+        // Get opportunity detection
+        let opportunityDetection = await opportunityDetector.detectOpportunity(context: context)
+
+        // Check rate limiting
+        let rateLimitResult = await adaptiveRateLimiter.canShowIntervention(
+            interventionContext: context,
+            interventionType: interventionType,
+            sessionDurationMs: currentUsage
+        )
+
+        // Get burden metrics
+        let burdenMetrics = await burdenTracker.calculateCurrentBurdenMetrics()
+        var mutableMetrics = burdenMetrics
+        let burdenLevel = mutableMetrics.calculateBurdenLevel()
+        let cooldownAdjustment = mutableMetrics.getRecommendedCooldownMultiplier()
+
+        // Log all decisions
+        decisionLogger.logPersonaDetection(
+            persona: personaDetection.persona,
+            confidence: personaDetection.confidence,
+            analytics: personaDetection.analytics
+        )
+        decisionLogger.logOpportunityDetection(
+            score: opportunityDetection.score,
+            level: opportunityDetection.level,
+            decision: opportunityDetection.decision,
+            breakdown: opportunityDetection.breakdown
+        )
+        decisionLogger.logRateLimitDecision(
+            allowed: rateLimitResult.allowed,
+            reason: rateLimitResult.reason,
+            burdenLevel: burdenLevel
+        )
+
+        // Check if burden is too high (async call needs to be extracted)
+        let isHighBurden = await burdenTracker.isHighBurden()
+
+        // Make final decision
+        let shouldShow = rateLimitResult.allowed &&
+                        opportunityDetection.score >= 50 &&
+                        !isHighBurden
+
+        let cooldownMs = Int64(300_000 * cooldownAdjustment)  // Base 5 min * adjustment
+
+        let decision = InterventionDecisionFull(
+            shouldShow: shouldShow,
+            reason: shouldShow ? rateLimitResult.reason : "JITAI decision: skip",
+            opportunityScore: opportunityDetection.score,
+            burdenLevel: burdenLevel,
+            recommendedCooldown: cooldownMs,
+            persona: personaDetection.persona,
+            decisionSource: rateLimitResult.decisionSource
+        )
+
+        // Store current decision
+        await MainActor.run {
+            currentDecision = decision
+        }
+
+        return decision
+    }
+
+    /// Show intervention with specified delivery method
+    /// - Parameters:
+    ///   - app: Target app bundle ID
+    ///   - currentUsage: Current session duration in milliseconds
+    ///   - interventionType: Type of intervention
+    ///   - deliveryMethod: How to deliver the intervention
+    func showInterventionWithDelivery(
+        for app: String,
+        currentUsage: TimeInterval,
+        interventionType: JitaiInterventionType = .reminder,
+        deliveryMethod: InterventionDeliveryMethod = .automatic
+    ) async {
+        // Get decision
+        let decision = await getInterventionDecision(
+            for: app,
+            currentUsage: currentUsage,
+            interventionType: interventionType
+        )
+
+        guard decision.shouldShow else {
+            logInfo("Intervention not shown: \(decision.reason)")
+            return
+        }
+
+        // Select content using Thompson Sampling if we have enough data
+        let contentType: ContentType
+        let useThompsonSampling = await thompsonSamplingEngine.hasSufficientDataForExploration()
+
+        if useThompsonSampling {
+            let armSelection = await thompsonSamplingEngine.selectArm()
+            contentType = ContentType(rawValue: armSelection.armId) ?? .reflection
+
+            decisionLogger.logThompsonSamplingSelection(
+                selection: armSelection,
+                allArmStats: await thompsonSamplingEngine.getAllArmStats()
+            )
+        } else {
+            // Fall back to persona-aware selection
+            guard let context = await buildInterventionContext(
+                targetApp: app,
+                currentUsage: currentUsage,
+                interventionType: interventionType
+            ) else {
+                return
+            }
+
+            let contentSelection = await personaAwareContentSelector.selectContent(
+                context: context,
+                interventionType: interventionType
+            )
+            contentType = contentSelection.contentType
+
+            let persona = await personaDetector.detectPersona()
+            decisionLogger.logContentSelection(
+                selected: contentType,
+                persona: persona.persona,
+                weights: persona.persona.baseWeights,
+                reason: contentSelection.selectionReason
+            )
+        }
+
+        // Generate content
+        let contentSelector = ContentSelector()
+        let content = contentSelector.generateContentByType(
+            contentTypeName: contentType.rawValue,
+            context: lastDecisionContext ?? InterventionContext(
+                timeOfDay: 0,
+                dayOfWeek: 0,
+                isWeekend: false,
+                targetApp: app,
+                currentSessionMinutes: 0,
+                sessionCount: 0,
+                lastSessionEndTime: 0,
+                timeSinceLastSession: 0,
+                quickReopenAttempt: false,
+                totalUsageToday: 0,
+                totalUsageYesterday: 0,
+                weeklyAverage: 0,
+                goalMinutes: nil,
+                isOverGoal: false,
+                streakDays: 0,
+                userFrictionLevel: .gentle,
+                daysSinceInstall: 0,
+                bestSessionMinutes: 0
+            )
+        )
+
+        // Determine delivery method
+        let method: InterventionDeliveryMethod
+        if deliveryMethod == .automatic {
+            // Auto-select best method
+            if #available(iOS 16.1, *),
+               await liveActivityManager.checkAvailability() {
+                method = .liveActivity
+            } else {
+                method = .notification
+            }
+        } else {
+            method = deliveryMethod
+        }
+
+        // Deliver based on method
+        switch method {
+        case .inApp:
+            // Show in app (original behavior)
+            await MainActor.run {
+                currentIntervention = InterventionContentModel(
+                    type: contentType,
+                    title: content.title,
+                    content: content.content,
+                    subtext: content.subtext,
+                    actionLabel: "Take a Break",
+                    dismissLabel: "Continue",
+                    metadata: [:]
+                )
+                isShowingIntervention = true
+            }
+
+        case .notification:
+            if let context = lastDecisionContext {
+                notificationScheduler.scheduleIntervention(
+                    content: InterventionContentModel(
+                        type: contentType,
+                        title: content.title,
+                        content: content.content,
+                        subtext: content.subtext,
+                        actionLabel: "Take a Break",
+                        dismissLabel: "Continue",
+                        metadata: [:]
+                    ),
+                    context: context
+                )
+            }
+
+        case .liveActivity:
+            if #available(iOS 16.1, *),
+               let context = lastDecisionContext {
+                _ = await liveActivityManager.startLiveActivity(
+                    content: InterventionContentModel(
+                        type: contentType,
+                        title: content.title,
+                        content: content.content,
+                        subtext: content.subtext,
+                        actionLabel: "Take a Break",
+                        dismissLabel: "Continue",
+                        metadata: [:]
+                    ),
+                    context: context
+                )
+            }
+
+        case .automatic:
+            break  // Handled above
+        }
+
+        // Log delivery
+        decisionLogger.logInterventionDelivered(
+            method: method,
+            contentId: contentType.rawValue,
+            targetApp: app,
+            success: true
+        )
+    }
+}
+
+// MARK: - Supporting Types
+
+/// Full intervention decision with rich context
+struct InterventionDecisionFull {
+    let shouldShow: Bool
+    let reason: String
+    let opportunityScore: Int
+    let burdenLevel: BurdenLevel
+    let recommendedCooldown: Int64  // milliseconds
+    let persona: UserPersona?
+    let decisionSource: String
+
+    var cooldownMinutes: Int {
+        return Int(recommendedCooldown / 60_000)
     }
 }

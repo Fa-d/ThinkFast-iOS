@@ -28,6 +28,15 @@ protocol DependencyContainer {
     var personaAwareContentSelector: PersonaAwareContentSelector { get }
     var adaptiveInterventionRateLimiter: AdaptiveInterventionRateLimiter { get }
     var jitaiInterventionManager: JitaiInterventionManager { get }
+    var deviceActivityManager: DeviceActivityManager { get }
+
+    // NEW: Advanced JITAI Components
+    var burdenTracker: InterventionBurdenTracker { get }
+    var thompsonSamplingEngine: ThompsonSamplingEngine { get }
+    var outcomeTracker: ComprehensiveOutcomeTracker { get }
+    var decisionLogger: DecisionLogger { get }
+    var notificationScheduler: InterventionNotificationScheduler { get }
+    var liveActivityManager: InterventionLiveActivityManager { get }
 }
 
 /// Main dependency container implementation
@@ -79,8 +88,39 @@ final class AppDependencyContainer: DependencyContainer {
         adaptiveRateLimiter: adaptiveInterventionRateLimiter,
         interventionResultRepository: interventionResultRepository,
         goalRepository: goalRepository,
+        usageRepository: usageRepository,
+        burdenTracker: burdenTracker,
+        thompsonSamplingEngine: thompsonSamplingEngine,
+        outcomeTracker: outcomeTracker,
+        decisionLogger: decisionLogger
+    )
+
+    @MainActor
+    lazy var deviceActivityManager: DeviceActivityManager = DeviceActivityManager(
+        jitaiManager: jitaiInterventionManager
+    )
+
+    // MARK: - Advanced JITAI Components (Lazy)
+    lazy var burdenTracker: InterventionBurdenTracker = InterventionBurdenTracker(
+        interventionResultRepository: interventionResultRepository,
         usageRepository: usageRepository
     )
+
+    lazy var thompsonSamplingEngine: ThompsonSamplingEngine = ThompsonSamplingEngine(
+        userDefaults: UserDefaults.standard
+    )
+
+    lazy var outcomeTracker: ComprehensiveOutcomeTracker = ComprehensiveOutcomeTracker(
+        interventionResultRepository: interventionResultRepository,
+        usageRepository: usageRepository,
+        burdenTracker: burdenTracker
+    )
+
+    lazy var decisionLogger: DecisionLogger = DecisionLogger()
+
+    lazy var notificationScheduler: InterventionNotificationScheduler = InterventionNotificationScheduler()
+
+    lazy var liveActivityManager: InterventionLiveActivityManager = InterventionLiveActivityManager()
 
     // MARK: - Initializer
     private init(modelContext: ModelContext? = nil) {

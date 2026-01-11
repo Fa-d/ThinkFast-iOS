@@ -14,10 +14,10 @@ import UserNotifications
 // MARK: - Background Monitoring Service
 @MainActor
 class BackgroundMonitoringService: ObservableObject {
-    private let logger = Logger(subsystem: "dev.sadakat.thinkfast", category: "BackgroundMonitoring")
+    private let logger = Logger(subsystem: "dev.sadakat.intently", category: "BackgroundMonitoring")
 
-    private let backgroundTaskIdentifier = "dev.sadakat.thinkfast.usage-sync"
-    private let interventionTaskIdentifier = "dev.sadakat.thinkfast.intervention-check"
+    private let backgroundTaskIdentifier = "dev.sadakat.intently.usage-sync"
+    private let interventionTaskIdentifier = "dev.sadakat.intently.intervention-check"
 
     @Published var isScheduled = false
     @Published var lastSyncDate: Date?
@@ -252,7 +252,7 @@ class BackgroundMonitoringService: ObservableObject {
     // MARK: - Update Shared Defaults
     private func updateSharedDefaults() {
         guard let context = modelContext,
-              let sharedDefaults = UserDefaults(suiteName: "group.dev.sadakat.thinkfast") else {
+              let sharedDefaults = UserDefaults(suiteName: "group.dev.sadakat.intently") else {
             return
         }
 

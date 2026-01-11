@@ -9,6 +9,8 @@ import SwiftUI
 
 struct MainTabView: View {
     @State private var selectedTab = 0
+    @Environment(\.dependencies) private var dependencies
+    @State private var showInterventionSheet = false
 
     var body: some View {
         TabView(selection: $selectedTab) {
@@ -31,6 +33,12 @@ struct MainTabView: View {
                 .tag(2)
         }
         .tint(.appPrimary)
+        .sheet(isPresented: $showInterventionSheet) {
+            InterventionSheet()
+        }
+        .onReceive(dependencies.jitaiInterventionManager.$isShowingIntervention) { isShowing in
+            showInterventionSheet = isShowing
+        }
     }
 }
 

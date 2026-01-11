@@ -17,7 +17,7 @@ class DeviceActivityReportExtension: DeviceActivityReportExtension {
         return IntentlyUsageReport(configuration: configuration)
     }
 
-    private let logger = Logger(subsystem: "dev.sadakat.thinkfast.extension", category: "Report")
+    private let logger = Logger(subsystem: "dev.sadakat.intently.extension", category: "Report")
 }
 
 // MARK: - Think Fast Usage Report
@@ -53,7 +53,7 @@ struct IntentlyUsageReport: DeviceActivityReport {
                 report += "  Time: \(formatDuration(duration))\n\n"
 
                 // Update shared defaults
-                if let sharedDefaults = UserDefaults(suiteName: "group.dev.sadakat.thinkfast") {
+                if let sharedDefaults = UserDefaults(suiteName: "group.dev.sadakat.intently") {
                     let key = "usage_\(bundleId)"
                     let minutes = duration / 60
                     sharedDefaults.set(minutes, forKey: key)
@@ -66,7 +66,7 @@ struct IntentlyUsageReport: DeviceActivityReport {
         return report
     }
 
-    private let logger = Logger(subsystem: "dev.sadakat.thinkfast.extension", category: "Report")
+    private let logger = Logger(subsystem: "dev.sadakat.intently.extension", category: "Report")
 
     private func formatDuration(_ duration: TimeInterval) -> String {
         let minutes = Int(duration / 60)

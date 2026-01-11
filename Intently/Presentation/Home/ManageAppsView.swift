@@ -18,6 +18,9 @@ struct ManageAppsView: View {
     @State private var showingGoalSetup = false
     @State private var showingAppPicker = false
     @State private var familyActivitySelection = FamilyActivitySelection()
+    @State private var isAuthorized = false
+    @State private var showingAuthorizationSheet = false
+    @State private var authorizationError: String?
 
     var onAppsSelected: (([TrackedApp]) -> Void)? = nil
 
@@ -73,8 +76,12 @@ struct ManageAppsView: View {
                 simulatorAppsList
                 #else
                 // Real device - use FamilyActivityPicker
-                FamilyActivityPicker(selection: $familyActivitySelection)
-                    .edgesIgnoringSafeArea(.bottom)
+                if isAuthorized {
+                    FamilyActivityPicker(selection: $familyActivitySelection)
+                        .edgesIgnoringSafeArea(.bottom)
+                } else {
+                    authorizationPromptView
+                }
                 #endif
             }
             .navigationTitle("Track Apps")
@@ -108,6 +115,7 @@ struct ManageAppsView: View {
                 )
             }
             loadCurrentSelection()
+            checkAuthorizationStatus()
         }
         .task {
             // Load existing goals and mark apps as selected
@@ -174,6 +182,87 @@ struct ManageAppsView: View {
             TrackedApp(id: "com.reddit.Reddit", name: "Reddit", icon: "arrow.up.circle", category: .social, isEnabled: true, isSelected: false, isRecommended: false),
             TrackedApp(id: "com.netflix.Netflix", name: "Netflix", icon: "tv.fill", category: .entertainment, isEnabled: true, isSelected: false, isRecommended: false),
         ]
+    }
+
+    // MARK: - Authorization
+    private func checkAuthorizationStatus() {
+        #if !targetEnvironment(simulator)
+        let center = AuthorizationCenter.shared
+        isAuthorized = center.authorizationStatus == .approved
+
+        if !isAuthorized {
+            // Request authorization immediately
+            Task {
+                await requestAuthorization()
+            }
+        }
+        #endif
+    }
+
+    private func requestAuthorization() async {
+        #if !targetEnvironment(simulator)
+        let center = AuthorizationCenter.shared
+        do {
+            try await center.requestAuthorization(for: .individual)
+            await MainActor.run {
+                isAuthorized = center.authorizationStatus == .approved
+                if !isAuthorized {
+                    authorizationError = "Authorization was not approved. Please go to Settings > Screen Time to grant access."
+                }
+            }
+        } catch {
+            await MainActor.run {
+                authorizationError = error.localizedDescription
+                isAuthorized = false
+            }
+        }
+        #endif
+    }
+
+    // MARK: - Authorization Prompt View
+    private var authorizationPromptView: some View {
+        VStack(spacing: AppTheme.Spacing.lg) {
+            Spacer()
+
+            Image(systemName: "exclamationmark.triangle.fill")
+                .font(.system(size: 60))
+                .foregroundColor(.appOrange)
+
+            Text("Authorization Required")
+                .font(.title2)
+                .fontWeight(.bold)
+
+            if let error = authorizationError {
+                Text(error)
+                    .font(.body)
+                    .foregroundColor(.appTextSecondary)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal)
+            } else {
+                Text("Intently needs permission to access your installed apps to track usage.")
+                    .font(.body)
+                    .foregroundColor(.appTextSecondary)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal)
+            }
+
+            Button {
+                Task {
+                    await requestAuthorization()
+                }
+            } label: {
+                Text("Grant Access")
+                    .font(.headline)
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.appPrimary)
+                    .cornerRadius(AppTheme.CornerRadius.md)
+            }
+            .padding(.horizontal)
+
+            Spacer()
+        }
     }
 
     // MARK: - Save Selected Apps as Goals

@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct SettingsView: View {
+    @Environment(\.dependencies) private var dependencies
     @State private var showingGoalManagement = false
     @State private var showingAppManagement = false
     @State private var showingAbout = false
@@ -125,6 +126,45 @@ struct SettingsView: View {
                             .foregroundColor(.appTextSecondary)
                     }
                 }
+
+                // Debug Section (for development)
+                #if DEBUG
+                Section("Debug") {
+                    Button(action: {
+                        Task {
+                            await triggerTestIntervention()
+                        }
+                    }) {
+                        HStack {
+                            Image(systemName: "ladybug.fill")
+                                .foregroundColor(.orange)
+                            Text("Trigger Test Intervention")
+                        }
+                    }
+
+                    Button(action: {
+                        Task {
+                            await triggerNotificationTest()
+                        }
+                    }) {
+                        HStack {
+                            Image(systemName: "bell.badge.fill")
+                                .foregroundColor(.blue)
+                            Text("Test Notification")
+                        }
+                    }
+
+                    Button(action: {
+                        testAppGroupAccess()
+                    }) {
+                        HStack {
+                            Image(systemName: "app.connected.to.app.below.fill")
+                                .foregroundColor(.green)
+                            Text("Test App Group")
+                        }
+                    }
+                }
+                #endif
             }
             .navigationTitle("Settings")
         }
@@ -132,6 +172,83 @@ struct SettingsView: View {
             AboutView()
         }
     }
+
+    // MARK: - Debug Actions
+    #if DEBUG
+    private func testAppGroupAccess() {
+        let appGroupID = "group.dev.sadakat.intently"
+
+        guard let sharedDefaults = UserDefaults(suiteName: appGroupID) else {
+            print("❌ FAILED: Cannot access App Group '\(appGroupID)'")
+            print("   This means the App Group is not registered in Apple Developer Portal")
+            print("   or not properly configured in your entitlements/provisioning profile")
+            return
+        }
+
+        // Try to write test data
+        let testKey = "appgroup_test"
+        let testValue = "App Group is working! ✅"
+        sharedDefaults.set(testValue, forKey: testKey)
+        sharedDefaults.synchronize()
+
+        // Try to read it back
+        if let readValue = sharedDefaults.string(forKey: testKey), readValue == testValue {
+            print("✅ SUCCESS: App Group '\(appGroupID)' is working correctly!")
+            print("   Main app and DeviceActivityReportExtension can now share data")
+            print("   Usage statistics will be properly synchronized")
+
+            // Clean up
+            sharedDefaults.removeObject(forKey: testKey)
+        } else {
+            print("⚠️ WARNING: App Group accessible but data not persisting correctly")
+        }
+    }
+
+    private func triggerTestIntervention() async {
+        // Trigger a test intervention through the JitAI manager
+        await dependencies.jitaiInterventionManager.showIntervention(
+            for: "com.apple Safari",
+            currentUsage: 15 * 60 * 1000,  // 15 minutes
+            interventionType: .reminder
+        )
+    }
+
+    private func triggerNotificationTest() async {
+        // Test notification delivery
+        let content = InterventionContentModel(
+            type: .reflection,
+            title: "Test Notification",
+            content: "This is a test intervention notification",
+            subtext: "You can dismiss this to continue",
+            actionLabel: "Take Action",
+            dismissLabel: "Dismiss",
+            metadata: ["test": true]
+        )
+
+        let context = InterventionContext(
+            timeOfDay: Calendar.current.component(.hour, from: Date()),
+            dayOfWeek: Calendar.current.component(.weekday, from: Date()),
+            isWeekend: false,
+            targetApp: "com.apple.Safari",
+            currentSessionMinutes: 0,
+            sessionCount: 1,
+            lastSessionEndTime: 0,
+            timeSinceLastSession: 0,
+            quickReopenAttempt: false,
+            totalUsageToday: 0,
+            totalUsageYesterday: 0,
+            weeklyAverage: 0,
+            goalMinutes: nil,
+            isOverGoal: false,
+            streakDays: 0,
+            userFrictionLevel: .gentle,
+            daysSinceInstall: 0,
+            bestSessionMinutes: 0
+        )
+
+        dependencies.notificationScheduler.sendImmediateIntervention(content: content)
+    }
+    #endif
 }
 
 // MARK: - Account View
@@ -409,7 +526,7 @@ struct HelpView: View {
             Section {
                 Link("Privacy Policy", destination: URL(string: "https://example.com/privacy")!)
                 Link("Terms of Service", destination: URL(string: "https://example.com/terms")!)
-                Link("Contact Support", destination: URL(string: "mailto:support@thinkfast.app")!)
+                Link("Contact Support", destination: URL(string: "mailto:support@intently.app")!)
             }
 
             Section {

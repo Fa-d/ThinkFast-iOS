@@ -9,12 +9,16 @@ import SwiftUI
 
 struct InterventionView: View {
     let content: InterventionContent
+    let frictionLevel: FrictionLevel
     let onContinue: () -> Void
     let onQuit: () -> Void
     let onDismiss: () -> Void
 
     @State private var isAnimating = false
     @State private var showQuitConfirmation = false
+    @State private var countdownSeconds: Int = 0
+    @State private var canProceed = false
+    @State private var showBreathingExercise = false
 
     var body: some View {
         ZStack {
@@ -22,15 +26,22 @@ struct InterventionView: View {
             Color.black.opacity(0.4)
                 .ignoresSafeArea()
                 .onTapGesture {
-                    onDismiss()
+                    if frictionLevel == .gentle {
+                        onDismiss()
+                    }
                 }
 
             // Intervention Card
             VStack(spacing: 0) {
-                // Header
+                // Header with friction indicator
                 header
 
                 Divider()
+
+                // Friction-level specific countdown or breathing
+                if frictionLevel.requiresInteraction {
+                    frictionView
+                }
 
                 // Content
                 contentView
@@ -51,16 +62,97 @@ struct InterventionView: View {
             withAnimation(.spring(response: 0.4, dampingFraction: 0.7)) {
                 isAnimating = true
             }
+
+            // Start countdown if needed
+            if frictionLevel.requiresInteraction {
+                startCountdown()
+            }
+        }
+        .sheet(isPresented: $showBreathingExercise) {
+            BreathingExerciseView(onComplete: {
+                showBreathingExercise = false
+            })
+        }
+    }
+
+    // MARK: - Friction View
+    @ViewBuilder
+    private var frictionView: some View {
+        VStack(spacing: AppTheme.Spacing.md) {
+            // Countdown timer
+            if countdownSeconds > 0 {
+                VStack(spacing: AppTheme.Spacing.sm) {
+                    Text(frictionLevel.description)
+                        .font(.caption)
+                        .foregroundColor(.appTextSecondary)
+
+                    Text("\(countdownSeconds)")
+                        .font(.system(size: 48, weight: .bold, design: .rounded))
+                        .foregroundColor(canProceed ? .appGreen : .appPrimary)
+
+                    if !canProceed {
+                        Text("Please wait before continuing")
+                            .font(.caption)
+                            .foregroundColor(.appTextSecondary)
+                    }
+                }
+                .padding(.vertical, AppTheme.Spacing.lg)
+            }
+
+            // Breathing exercise prompt (for firm friction)
+            if frictionLevel == .firm && canProceed && !showBreathingExercise {
+                Button(action: { showBreathingExercise = true }) {
+                    HStack {
+                        Image(systemName: "wind")
+                        Text("Take a Breathing Exercise")
+                    }
+                    .font(.subheadline)
+                    .foregroundColor(.appPrimary)
+                    .padding(.horizontal, AppTheme.Spacing.lg)
+                    .padding(.vertical, AppTheme.Spacing.sm)
+                    .background(Color.appPrimary.opacity(0.1))
+                    .cornerRadius(AppTheme.CornerRadius.md)
+                }
+            }
+        }
+        .padding(.vertical, AppTheme.Spacing.md)
+        .background(Color.appBackground.opacity(0.5))
+    }
+
+    // MARK: - Start Countdown
+    private func startCountdown() {
+        countdownSeconds = frictionLevel.delayMs / 1000
+        canProceed = false
+
+        Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
+            if countdownSeconds > 0 {
+                countdownSeconds -= 1
+            } else {
+                timer.invalidate()
+                canProceed = true
+            }
         }
     }
 
     // MARK: - Header
     private var header: some View {
         HStack {
-            Button(action: onDismiss) {
-                Image(systemName: "xmark.circle.fill")
-                    .foregroundColor(.appTextSecondary)
-                    .font(.title3)
+            // Dismiss button (only for gentle friction)
+            if frictionLevel == .gentle {
+                Button(action: onDismiss) {
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundColor(.appTextSecondary)
+                        .font(.title3)
+                }
+            } else {
+                // Friction level indicator for higher friction
+                frictionIndicator
+                    .font(.caption2)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 4)
+                    .background(frictionColor.opacity(0.2))
+                    .foregroundColor(frictionColor)
+                    .cornerRadius(12)
             }
 
             Text(content.title)
@@ -68,8 +160,43 @@ struct InterventionView: View {
                 .foregroundColor(.appTextPrimary)
 
             Spacer()
+
+            // Friction badge
+            Text(frictionLevel.displayName.uppercased())
+                .font(.caption2)
+                .fontWeight(.semibold)
+                .padding(.horizontal, 8)
+                .padding(.vertical, 4)
+                .background(frictionColor.opacity(0.2))
+                .foregroundColor(frictionColor)
+                .cornerRadius(4)
         }
         .padding()
+    }
+
+    // MARK: - Friction Indicator
+    private var frictionIndicator: some View {
+        HStack(spacing: 4) {
+            ForEach(0..<4) { index in
+                Circle()
+                    .fill(index < frictionLevel.rawValue + 1 ? frictionColor : Color.gray.opacity(0.3))
+                    .frame(width: 6, height: 6)
+            }
+        }
+    }
+
+    // MARK: - Friction Color
+    private var frictionColor: Color {
+        switch frictionLevel {
+        case .gentle:
+            return .green
+        case .moderate:
+            return .yellow
+        case .firm:
+            return .orange
+        case .locked:
+            return .red
+        }
     }
 
     // MARK: - Content View
@@ -164,8 +291,8 @@ struct InterventionView: View {
     // MARK: - Actions
     private var actionsView: some View {
         VStack(spacing: AppTheme.Spacing.sm) {
-            // Primary Action
-            Button(action: showQuitConfirmation ? onQuit : onContinue) {
+            // Primary Action - affected by friction level
+            Button(action: canProceed || !frictionLevel.requiresInteraction ? (showQuitConfirmation ? onQuit : onContinue) : {}) {
                 HStack {
                     Image(systemName: showQuitConfirmation ? "checkmark.circle.fill" : "arrow.right.circle.fill")
                     Text(showQuitConfirmation ? "Yes, Quit" : content.actionLabel)
@@ -174,9 +301,10 @@ struct InterventionView: View {
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity)
                 .padding()
-                .background(showQuitConfirmation ? Color.appGreen : Color.appPrimary)
+                .background((canProceed || !frictionLevel.requiresInteraction) ? (showQuitConfirmation ? Color.appGreen : Color.appPrimary) : Color.gray)
                 .cornerRadius(AppTheme.CornerRadius.md)
             }
+            .disabled(!canProceed && frictionLevel.requiresInteraction && !showQuitConfirmation)
 
             // Secondary Action (if showing quit confirmation)
             if showQuitConfirmation {
@@ -188,8 +316,8 @@ struct InterventionView: View {
                 .font(.subheadline)
                 .foregroundColor(.appTextSecondary)
                 .padding(.vertical, 4)
-            } else {
-                // Dismiss / Continue Anyway
+            } else if frictionLevel != .locked {
+                // Dismiss / Continue Anyway (not available for locked friction)
                 Button(action: {
                     showQuitConfirmation = true
                 }) {
@@ -200,13 +328,21 @@ struct InterventionView: View {
                 .padding(.vertical, 4)
             }
 
-            // Bottom dismiss
-            Button(content.dismissLabel) {
-                onDismiss()
+            // Bottom dismiss (only for gentle friction)
+            if frictionLevel == .gentle {
+                Button(content.dismissLabel) {
+                    onDismiss()
+                }
+                .font(.caption)
+                .foregroundColor(.appTextTertiary)
+                .padding(.bottom, 4)
+            } else if frictionLevel == .locked {
+                // Message for locked friction
+                Text("This intervention requires your attention")
+                    .font(.caption)
+                    .foregroundColor(.appTextSecondary)
+                    .padding(.bottom, 4)
             }
-            .font(.caption)
-            .foregroundColor(.appTextTertiary)
-            .padding(.bottom, 4)
         }
         .padding()
     }
@@ -259,7 +395,7 @@ struct BreathingExerciseView: View {
 }
 
 // MARK: - Preview
-#Preview("Reflection") {
+#Preview("Reflection - Gentle") {
     InterventionView(
         content: InterventionContent(
             type: .reflection,
@@ -268,13 +404,14 @@ struct BreathingExerciseView: View {
             actionLabel: "I'll Think About It",
             dismissLabel: "Continue Anyway"
         ),
+        frictionLevel: .gentle,
         onContinue: {},
         onQuit: {},
         onDismiss: {}
     )
 }
 
-#Preview("Time Alternative") {
+#Preview("Time Alternative - Moderate") {
     InterventionView(
         content: InterventionContent(
             type: .timeAlternative,
@@ -283,13 +420,14 @@ struct BreathingExerciseView: View {
             actionLabel: "Sounds Good",
             dismissLabel: "Not Now"
         ),
+        frictionLevel: .moderate,
         onContinue: {},
         onQuit: {},
         onDismiss: {}
     )
 }
 
-#Preview("Breathing") {
+#Preview("Breathing - Firm") {
     InterventionView(
         content: InterventionContent(
             type: .breathing,
@@ -298,6 +436,23 @@ struct BreathingExerciseView: View {
             actionLabel: "Start Breathing",
             dismissLabel: "Skip"
         ),
+        frictionLevel: .firm,
+        onContinue: {},
+        onQuit: {},
+        onDismiss: {}
+    )
+}
+
+#Preview("Locked - Maximum Friction") {
+    InterventionView(
+        content: InterventionContent(
+            type: .reflection,
+            content: "You've exceeded your daily limit. Take a break and come back tomorrow.",
+            title: "Time for a Break",
+            actionLabel: "I Understand",
+            dismissLabel: ""
+        ),
+        frictionLevel: .locked,
         onContinue: {},
         onQuit: {},
         onDismiss: {}

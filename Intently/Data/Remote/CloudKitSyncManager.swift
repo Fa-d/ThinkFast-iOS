@@ -13,9 +13,9 @@ import SwiftData
 // MARK: - CloudKit Sync Manager
 @MainActor
 class CloudKitSyncManager: ObservableObject {
-    private let logger = Logger(subsystem: "dev.sadakat.thinkfast", category: "CloudKit")
+    private let logger = Logger(subsystem: "dev.sadakat.intently", category: "CloudKit")
 
-    private let container = CKContainer(identifier: "iCloud.dev.sadakat.thinkfast")
+    private let container = CKContainer(identifier: "iCloud.dev.sadakat.intently")
     private let privateDatabase: CKDatabase
 
     @Published var isSyncing = false

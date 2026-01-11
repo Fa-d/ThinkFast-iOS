@@ -7,6 +7,8 @@
 
 import SwiftUI
 import SwiftData
+import FamilyControls
+import ManagedSettings
 
 struct OnboardingView: View {
     @Environment(\.modelContext) private var modelContext
@@ -14,7 +16,9 @@ struct OnboardingView: View {
 
     @State private var currentStep = 0
     @State private var selectedApps: Set<String> = []
+    @State private var appActivitySelection = FamilyActivitySelection()
     @State private var dailyGoalMinutes: Int = 60
+    @State private var showingAppPicker = false
 
     private let totalSteps = 6
 
@@ -38,8 +42,9 @@ struct OnboardingView: View {
                     )
                 case 3:
                     AppSelectionStep(
-                        selectedApps: $selectedApps,
-                        onNext: nextStep
+                        appActivitySelection: $appActivitySelection,
+                        onNext: nextStep,
+                        showPicker: { showingAppPicker = true }
                     )
                 case 4:
                     PermissionStep(onNext: nextStep)
@@ -52,6 +57,12 @@ struct OnboardingView: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
         .background(Color.appBackground)
+        .fullScreenCover(isPresented: $showingAppPicker) {
+            AppPickerFullScreenView(
+                appActivitySelection: $appActivitySelection,
+                onDismiss: { showingAppPicker = false }
+            )
+        }
     }
 
     private func nextStep() {
@@ -64,28 +75,31 @@ struct OnboardingView: View {
 
     private func completeOnboarding() {
         Task {
-            // Save goals for selected apps
-            let bundleMapping: [String: String] = [
-                "Facebook": "com.facebook.Facebook",
-                "Instagram": "com.burbn.instagram",
-                "TikTok": "com.zhiliaoapp.musically",
-                "X (Twitter)": "com.atebits.Tweetie2",
-                "YouTube": "com.google.YouTube",
-                "Snapchat": "com.toyopagroup.picaboo"
-            ]
+            // Save the FamilyActivitySelection to shared UserDefaults for DeviceActivity extension
+            if let sharedDefaults = UserDefaults(suiteName: "group.dev.sadakat.intently") {
+                // Save selection count
+                let selectionCount = appActivitySelection.applicationTokens.count
+                sharedDefaults.set(selectionCount, forKey: "selectedAppsCount")
 
-            for appName in selectedApps {
-                if let bundleId = bundleMapping[appName] {
-                    let goal = Goal(
-                        targetApp: bundleId,
-                        targetAppName: appName,
-                        dailyLimitMinutes: dailyGoalMinutes,
-                        startDate: Date(),
-                        isEnabled: true,
-                        syncStatus: "pending"
-                    )
-                    modelContext.insert(goal)
-                }
+                // Save selection timestamp
+                sharedDefaults.set(Date(), forKey: "selectionDate")
+                sharedDefaults.synchronize()
+            }
+
+            // Create placeholder goals for each selected application
+            // Note: We can't extract bundle IDs from ApplicationToken, but we track the count
+            let appCount = appActivitySelection.applicationTokens.count
+
+            for index in 0..<appCount {
+                let goal = Goal(
+                    targetApp: "selection_\(index)",  // Placeholder ID
+                    targetAppName: "Selected App \(index + 1)",  // Placeholder name
+                    dailyLimitMinutes: dailyGoalMinutes,
+                    startDate: Date(),
+                    isEnabled: true,
+                    syncStatus: "pending"
+                )
+                modelContext.insert(goal)
             }
 
             try? modelContext.save()
@@ -255,110 +269,178 @@ struct GoalSetupStep: View {
 }
 
 struct AppSelectionStep: View {
-    @Binding var selectedApps: Set<String>
+    @Binding var appActivitySelection: FamilyActivitySelection
     let onNext: () -> Void
+    let showPicker: () -> Void
 
-    private let availableApps = [
-        ("Facebook", "facebook", true),
-        ("Instagram", "instagram", true),
-        ("TikTok", "tiktok", true),
-        ("X (Twitter)", "twitter", true),
-        ("YouTube", "youtube", true),
-        ("Snapchat", "snapchat", false)
-    ]
+    @State private var selectionCount = 0
 
     var body: some View {
-        VStack(spacing: AppTheme.Spacing.lg) {
+        VStack(spacing: AppTheme.Spacing.xl) {
+            // Header
             VStack(spacing: AppTheme.Spacing.sm) {
+                Image(systemName: "app.badge.checkmark")
+                    .font(.system(size: 50))
+                    .foregroundColor(.appPrimary)
+
                 Text("Which apps to track?")
-                    .font(.title2)
+                    .font(.title)
                     .fontWeight(.bold)
 
-                Text("Select the apps you want to monitor")
-                    .font(.subheadline)
+                Text("Select the apps you want to monitor and set limits for")
+                    .font(.body)
                     .foregroundColor(.appTextSecondary)
+                    .multilineTextAlignment(.center)
             }
 
-            ScrollView {
-                VStack(spacing: AppTheme.Spacing.sm) {
-                    ForEach(availableApps, id: \.0) { app in
-                        AppSelectionRow(
-                            name: app.0,
-                            icon: app.1,
-                            isRecommended: app.2,
-                            isSelected: selectedApps.contains(app.0),
-                            onTap: {
-                                if selectedApps.contains(app.0) {
-                                    selectedApps.remove(app.0)
-                                } else {
-                                    selectedApps.insert(app.0)
-                                }
-                            }
-                        )
+            // Selected apps preview
+            if selectionCount == 0 {
+                emptyStateView
+            } else {
+                selectedAppsPreview
+            }
+
+            Spacer()
+
+            // Action buttons
+            VStack(spacing: AppTheme.Spacing.md) {
+                Button(action: showPicker) {
+                    HStack {
+                        Image(systemName: "plus.circle.fill")
+                        Text(selectionCount > 0 ? "Change Apps" : "Select Apps to Track")
                     }
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.appPrimary)
+                    .foregroundColor(.white)
+                    .cornerRadius(AppTheme.CornerRadius.md)
+                }
+
+                if selectionCount > 0 {
+                    PrimaryButton(
+                        title: "Continue (\(selectionCount))",
+                        action: onNext
+                    )
+                } else {
+                    Text("Select at least one app to continue")
+                        .font(.caption)
+                        .foregroundColor(.appRed)
                 }
             }
+            .padding()
+        }
+        .padding()
+        .task {
+            updateSelectionCount()
+        }
+        .onChange(of: appActivitySelection) { _, _ in
+            updateSelectionCount()
+        }
+    }
 
-            PrimaryButton(
-                title: "Continue (\(selectedApps.count))",
-                action: onNext,
-                isDisabled: selectedApps.isEmpty
-            )
-            .padding(.horizontal)
+    private var emptyStateView: some View {
+        VStack(spacing: AppTheme.Spacing.md) {
+            Image(systemName: "app.dashed")
+                .font(.system(size: 60))
+                .foregroundColor(.appTextTertiary)
+
+            Text("No apps selected yet")
+                .font(.headline)
+                .foregroundColor(.appTextSecondary)
+
+            Text("Tap the button above to select apps")
+                .font(.caption)
+                .foregroundColor(.appTextTertiary)
+                .multilineTextAlignment(.center)
         }
         .padding()
     }
-}
 
-struct AppSelectionRow: View {
-    let name: String
-    let icon: String
-    let isRecommended: Bool
-    let isSelected: Bool
-    let onTap: () -> Void
+    private var selectedAppsPreview: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: AppTheme.Spacing.sm) {
+                Text("\(selectionCount) app\(selectionCount == 1 ? "" : "s") selected")
+                    .font(.subheadline)
+                    .foregroundColor(.appTextSecondary)
 
-    var body: some View {
-        Button(action: onTap) {
-            HStack(spacing: AppTheme.Spacing.md) {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 10)
-                        .fill(Color.gray.opacity(0.2))
-                        .frame(width: 45, height: 45)
-
-                    Text(String(name.prefix(1)))
-                        .font(.title2)
-                        .fontWeight(.semibold)
-                }
-
-                VStack(alignment: .leading) {
-                    HStack(spacing: 4) {
-                        Text(name)
-                            .font(.subheadline)
-                            .fontWeight(.medium)
-
-                        if isRecommended {
-                            Text("Recommended")
-                                .font(.caption2)
-                                .padding(.horizontal, 6)
-                                .padding(.vertical, 2)
-                                .background(Color.appSecondary.opacity(0.3))
-                                .foregroundColor(.appPrimary)
-                                .cornerRadius(4)
+                // Show selection count with visual indicator
+                VStack(spacing: AppTheme.Spacing.xs) {
+                    ForEach(0..<min(selectionCount, 5), id: \.self) { _ in
+                        HStack(spacing: AppTheme.Spacing.sm) {
+                            Image(systemName: "checkmark.circle.fill")
+                                .foregroundColor(.appGreen)
+                            Text("Selected app")
+                                .font(.subheadline)
+                                .foregroundColor(.appTextSecondary)
+                            Spacer()
                         }
+                        .padding(.horizontal)
+                        .padding(.vertical, 4)
+                        .background(Color.appSecondaryBackground)
+                        .cornerRadius(8)
+                    }
+
+                    if selectionCount > 5 {
+                        Text("+ \(selectionCount - 5) more...")
+                            .font(.caption)
+                            .foregroundColor(.appTextTertiary)
+                            .padding(.horizontal)
                     }
                 }
-
-                Spacer()
-
-                Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
-                    .foregroundColor(isSelected ? .appPrimary : .appTextTertiary)
-                    .font(.title3)
             }
-            .padding()
-            .background(isSelected ? Color.appPrimary.opacity(0.1) : Color.appSecondaryBackground)
-            .cornerRadius(AppTheme.CornerRadius.md)
         }
-        .buttonStyle(PlainButtonStyle())
+    }
+
+    private func updateSelectionCount() {
+        selectionCount = appActivitySelection.applicationTokens.count
+    }
+}
+
+// Full-screen wrapper for FamilyActivityPicker
+struct AppPickerFullScreenView: View {
+    @Environment(\.dismiss) private var dismiss
+    @Binding var appActivitySelection: FamilyActivitySelection
+    let onDismiss: () -> Void
+
+    var body: some View {
+        NavigationView {
+            VStack(spacing: 0) {
+                // Header
+                VStack(spacing: AppTheme.Spacing.sm) {
+                    Text("Select Apps to Track")
+                        .font(.title2)
+                        .fontWeight(.bold)
+
+                    Text("Choose the apps you want Intently to monitor")
+                        .font(.subheadline)
+                        .foregroundColor(.appTextSecondary)
+                        .multilineTextAlignment(.center)
+                }
+                .padding()
+
+                Divider()
+
+                // FamilyActivityPicker - takes up available space
+                FamilyActivityPicker(
+                    selection: $appActivitySelection
+                )
+            }
+            .navigationTitle("Select Apps")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button("Cancel") {
+                        onDismiss()
+                    }
+                }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Done") {
+                        onDismiss()
+                    }
+                    .fontWeight(.semibold)
+                }
+            }
+        }
     }
 }
 

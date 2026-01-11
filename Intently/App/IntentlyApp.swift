@@ -14,7 +14,8 @@ struct IntentlyApp: App {
     @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = false
 
     // MARK: - SwiftData Container
-    let sharedModelContainer: ModelContainer = {
+    // Use static to ensure only one instance is created, preventing CloudKit duplicate registration warnings
+    static let sharedModelContainer: ModelContainer = {
         let schema = Schema([
             UsageSession.self,
             UsageEvent.self,
@@ -45,7 +46,7 @@ struct IntentlyApp: App {
                     .tint(.appPrimary)
             }
         }
-        .modelContainer(sharedModelContainer)
+        .modelContainer(Self.sharedModelContainer)
     }
 }
 

@@ -135,6 +135,19 @@ enum ContentType: String, Codable, CaseIterable {
     case quote = "QUOTE"
     case gamification = "GAMIFICATION"
     case activitySuggestion = "ACTIVITY_SUGGESTION"
+
+    var displayName: String {
+        switch self {
+        case .reflection: return "Reflection"
+        case .timeAlternative: return "Time Alternative"
+        case .breathing: return "Breathing"
+        case .stats: return "Statistics"
+        case .emotionalAppeal: return "Emotional Appeal"
+        case .quote: return "Quote"
+        case .gamification: return "Gamification"
+        case .activitySuggestion: return "Activity Suggestion"
+        }
+    }
 }
 
 // MARK: - User Persona
@@ -452,4 +465,382 @@ enum InterventionFeedback: String, Codable {
     case helpful = "HELPFUL"
     case disruptive = "DISRUPTIVE"
     case neutral = "NEUTRAL"
+}
+
+// MARK: - Burden Level (for burden tracking)
+enum BurdenLevel: String, Codable {
+    case low = "LOW"
+    case moderate = "MODERATE"
+    case high = "HIGH"
+    case critical = "CRITICAL"
+
+    var displayName: String {
+        switch self {
+        case .low: return "Low"
+        case .moderate: return "Moderate"
+        case .high: return "High"
+        case .critical: return "Critical"
+        }
+    }
+
+    var description: String {
+        switch self {
+        case .low: return "User is receptive to interventions"
+        case .moderate: return "Some fatigue detected, proceed with caution"
+        case .high: return "High fatigue, reduce intervention frequency"
+        case .critical: return "Maximum fatigue, minimize interventions"
+        }
+    }
+}
+
+// MARK: - Trend (for engagement patterns)
+enum Trend: String, Codable {
+    case increasing = "INCREASING"
+    case declining = "DECLINING"
+    case stable = "STABLE"
+
+    var displayName: String {
+        switch self {
+        case .increasing: return "Increasing"
+        case .declining: return "Declining"
+        case .stable: return "Stable"
+        }
+    }
+}
+
+// MARK: - Intervention Burden Metrics
+struct InterventionBurdenMetrics: Codable {
+    let avgResponseTime: Int64           // Average time to respond (ms)
+    let dismissRate: Float               // Rate of dismissals (0-1)
+    let timeoutRate: Float               // Rate of timeouts (0-1)
+    let snoozeFrequency: Int             // Number of snoozes
+    let recentEngagementTrend: Trend     // Engagement trend direction
+    let interventionsLast24h: Int        // Interventions in last 24 hours
+    let interventionsLast7d: Int         // Interventions in last 7 days
+    let effectivenessRolling7d: Float    // Rolling effectiveness (0-1)
+    let effectivenessTrend: Trend        // Effectiveness trend
+    let helpfulnessRatio: Float          // Helpful vs total responses
+    let sampleSize: Int                  // Number of data points
+
+    private var calculatedBurdenScore: Int?
+    private var calculatedBurdenLevel: BurdenLevel?
+
+    // Explicit initializer for the public properties only
+    init(
+        avgResponseTime: Int64,
+        dismissRate: Float,
+        timeoutRate: Float,
+        snoozeFrequency: Int,
+        recentEngagementTrend: Trend,
+        interventionsLast24h: Int,
+        interventionsLast7d: Int,
+        effectivenessRolling7d: Float,
+        effectivenessTrend: Trend,
+        helpfulnessRatio: Float,
+        sampleSize: Int
+    ) {
+        self.avgResponseTime = avgResponseTime
+        self.dismissRate = dismissRate
+        self.timeoutRate = timeoutRate
+        self.snoozeFrequency = snoozeFrequency
+        self.recentEngagementTrend = recentEngagementTrend
+        self.interventionsLast24h = interventionsLast24h
+        self.interventionsLast7d = interventionsLast7d
+        self.effectivenessRolling7d = effectivenessRolling7d
+        self.effectivenessTrend = effectivenessTrend
+        self.helpfulnessRatio = helpfulnessRatio
+        self.sampleSize = sampleSize
+        self.calculatedBurdenScore = nil
+        self.calculatedBurdenLevel = nil
+    }
+
+    /// Calculate burden score (0-100, higher = more burdened)
+    mutating func calculateBurdenScore() -> Int {
+        if let cached = calculatedBurdenScore {
+            return cached
+        }
+
+        // Dismiss rate contributes up to 30 points
+        let dismissScore = Int(dismissRate * 30)
+
+        // Timeout rate contributes up to 20 points
+        let timeoutScore = Int(timeoutRate * 20)
+
+        // Snooze frequency contributes up to 10 points
+        let snoozeScore = min(snoozeFrequency * 2, 10)
+
+        // Intervention frequency contributes up to 15 points
+        let frequencyScore = min(interventionsLast24h * 2, 15)
+
+        // Effectiveness contributes up to 25 points (lower effectiveness = higher burden)
+        let effectivenessScore = Int((1.0 - effectivenessRolling7d) * 25)
+
+        let totalScore = dismissScore + timeoutScore + snoozeScore + frequencyScore + effectivenessScore
+
+        calculatedBurdenScore = min(totalScore, 100)
+        return calculatedBurdenScore ?? 50
+    }
+
+    /// Get burden level based on score
+    mutating func calculateBurdenLevel() -> BurdenLevel {
+        if let cached = calculatedBurdenLevel {
+            return cached
+        }
+
+        let score = calculateBurdenScore()
+
+        switch score {
+        case 0..<25:
+            calculatedBurdenLevel = .low
+        case 25..<50:
+            calculatedBurdenLevel = .moderate
+        case 50..<75:
+            calculatedBurdenLevel = .high
+        default:
+            calculatedBurdenLevel = .critical
+        }
+
+        return calculatedBurdenLevel ?? .moderate
+    }
+
+    /// Get recommended cooldown multiplier based on burden
+    mutating func getRecommendedCooldownMultiplier() -> Float {
+        let level = calculateBurdenLevel()
+
+        switch level {
+        case .low:
+            return 0.5      // Show interventions more frequently
+        case .moderate:
+            return 1.0      // Normal frequency
+        case .high:
+            return 1.5      // Reduce frequency
+        case .critical:
+            return 3.0      // Significantly reduce frequency
+        }
+    }
+
+    /// Get human-readable summary
+    func getBurdenSummary() -> String {
+        let score = calculatedBurdenScore ?? 50
+        let level = calculatedBurdenLevel ?? .moderate
+
+        return "Burden: \(score)/100 (\(level.displayName)) - \(level.description)"
+    }
+}
+
+// MARK: - Thompson Sampling State (for ML-based content selection)
+struct ThompsonSamplingState: Codable {
+    var alpha: Float    // Success count + prior
+    var beta: Float     // Failure count + prior
+
+    /// Initialize with optimistic prior (Beta(1, 1))
+    init(alpha: Float = 1.0, beta: Float = 1.0) {
+        self.alpha = alpha
+        self.beta = beta
+    }
+
+    /// Sample from Beta distribution
+    func sample() -> Float {
+        // Use Gamma distribution approximation for Beta sampling
+        // Beta(alpha, beta) = Gamma(alpha, 1) / (Gamma(alpha, 1) + Gamma(beta, 1))
+        let gammaAlpha = gamma(alpha)
+        let gammaBeta = gamma(beta)
+        return gammaAlpha / (gammaAlpha + gammaBeta)
+    }
+
+    /// Simple Gamma approximation using log-gamma
+    private func gamma(_ alpha: Float) -> Float {
+        // Marsaglia and Tsang's method for Gamma sampling
+        if alpha < 1 {
+            return gamma(1 + alpha) * pow(Float.random(in: 0...1), 1.0 / alpha)
+        }
+
+        let d = alpha - 1.0 / 3.0
+        let c = 1.0 / sqrt(9.0 * d)
+
+        while true {
+            var x: Float = 0
+            var v: Float = 0
+
+            repeat {
+                x = Float.random(in: 0...1)
+                v = 1.0 + c * x
+            } while v <= 0
+
+            v = v * v * v
+            let u = Float.random(in: 0...1)
+
+            if u < 1.0 - 0.0331 * (x * x) * (x * x) {
+                return d * v * pow(u, 1.0 / alpha)
+            }
+
+            if log(u) < 0.5 * x * x + d * (1.0 - v + log(v)) {
+                return d * v * pow(u, 1.0 / alpha)
+            }
+        }
+    }
+
+    /// Get expected value (mean of Beta distribution)
+    var expectedValue: Float {
+        return alpha / (alpha + beta)
+    }
+
+    /// Get total pulls
+    var totalPulls: Int {
+        return Int(alpha + beta - 2)  // Subtract priors
+    }
+}
+
+// MARK: - Arm Selection Result
+struct ArmSelection: Codable {
+    let armId: String           // Content type selected
+    let confidence: Float       // Confidence in selection (0-1)
+    let strategy: String        // "exploration" or "exploitation"
+    let sampledValue: Float     // The sampled value from Thompson Sampling
+    let totalPulls: Int         // Total times this arm has been pulled
+
+    var displayName: String {
+        return ContentType(rawValue: armId)?.displayName ?? armId
+    }
+}
+
+// MARK: - Arm Statistics
+struct ArmStats: Codable {
+    let armId: String
+    let alpha: Int              // Success count
+    let beta: Int               // Failure count
+    let pullCount: Int          // Total selections
+    let successRate: Float      // Alpha / (Alpha + Beta)
+    let sampleMean: Float       // Expected value
+    let lastUpdated: Date
+
+    var contentType: ContentType? {
+        return ContentType(rawValue: armId)
+    }
+
+    var displayName: String {
+        return contentType?.displayName ?? armId
+    }
+}
+
+// MARK: - Comprehensive Intervention Outcome
+struct ComprehensiveInterventionOutcome: Codable {
+    let sessionId: UUID
+    let targetApp: String
+    let contentType: String
+    let userChoice: String
+    let wasEffective: Bool
+    let timeToShowDecisionMs: Int64
+    let sessionDurationAfterIntervention: Int64?  // Duration after intervention (ms)
+    let didReopenQuickly: Bool                    // Reopened within 5 minutes
+    let totalSessionDuration: Int64?               // Full session duration (ms)
+    let burdenScoreAtTime: Int
+    let personaAtTime: String
+    let opportunityScoreAtTime: Int
+    let reward: Float                              // Calculated reward for ML
+    let timestamp: Date
+
+    /// Create from basic intervention data
+    init(
+        sessionId: UUID,
+        targetApp: String,
+        contentType: String,
+        userChoice: String,
+        wasEffective: Bool,
+        timeToShowDecisionMs: Int64,
+        sessionDurationAfterIntervention: Int64? = nil,
+        didReopenQuickly: Bool = false,
+        totalSessionDuration: Int64? = nil,
+        burdenScoreAtTime: Int = 50,
+        personaAtTime: String = "",
+        opportunityScoreAtTime: Int = 50,
+        timestamp: Date = Date()
+    ) {
+        self.sessionId = sessionId
+        self.targetApp = targetApp
+        self.contentType = contentType
+        self.userChoice = userChoice
+        self.wasEffective = wasEffective
+        self.timeToShowDecisionMs = timeToShowDecisionMs
+        self.sessionDurationAfterIntervention = sessionDurationAfterIntervention
+        self.didReopenQuickly = didReopenQuickly
+        self.totalSessionDuration = totalSessionDuration
+        self.burdenScoreAtTime = burdenScoreAtTime
+        self.personaAtTime = personaAtTime
+        self.opportunityScoreAtTime = opportunityScoreAtTime
+        self.timestamp = timestamp
+
+        // Calculate reward based on effectiveness and compliance
+        self.reward = Self.calculateReward(
+            userChoice: userChoice,
+            wasEffective: wasEffective,
+            didReopenQuickly: didReopenQuickly,
+            sessionDurationAfter: sessionDurationAfterIntervention
+        )
+    }
+
+    /// Calculate reward for Thompson Sampling (range: -1.0 to 1.0)
+    private static func calculateReward(
+        userChoice: String,
+        wasEffective: Bool,
+        didReopenQuickly: Bool,
+        sessionDurationAfter: Int64?
+    ) -> Float {
+        var reward: Float = 0.0
+
+        // Base reward from user choice
+        switch userChoice.lowercased() {
+        case "go_back", "quit", "take_a_break":
+            reward += 1.0
+        case "snooze":
+            reward += 0.5
+        case "continue", "skip", "dismiss":
+            reward += 0.0
+        default:
+            reward += 0.0
+        }
+
+        // Effectiveness bonus
+        if wasEffective {
+            reward += 0.3
+        }
+
+        // Quick reopen penalty (non-compliance)
+        if didReopenQuickly {
+            reward -= 0.5
+        }
+
+        // Session duration consideration
+        if let durationAfter = sessionDurationAfter {
+            let minutesAfter = durationAfter / 60_000
+
+            // If user stayed away for a meaningful time, reward that
+            if minutesAfter > 15 {
+                reward += 0.2
+            } else if minutesAfter < 5 {
+                reward -= 0.3
+            }
+        }
+
+        return max(-1.0, min(1.0, reward))
+    }
+
+    /// Check if outcome indicates compliance
+    var isCompliant: Bool {
+        return wasEffective && !didReopenQuickly
+    }
+
+    /// Get compliance duration in minutes
+    var complianceDurationMinutes: Int? {
+        guard let duration = sessionDurationAfterIntervention else { return nil }
+        return Int(duration / 60_000)
+    }
+}
+
+// MARK: - Intervention Delivery Method
+enum InterventionDeliveryMethod: String, Codable {
+    case automatic = "AUTOMATIC"       // Choose best method automatically
+    case notification = "NOTIFICATION" // Use push notification
+    case liveActivity = "LIVE_ACTIVITY" // Use Live Activity (iOS 16.1+)
+    case inApp = "IN_APP"              // Show in-app when user is active
 }
